@@ -33,9 +33,11 @@ public class NoteTest {
         Note mute = new Note(Note.MUTE);
         Note empty = new Note(Note.EMPTY);
         Note fret = new Note(0);
+        Note invalidFret = new Note(-100);
         assertEquals(Note.MUTE_STRING, mute.toString());
         assertEquals(Note.EMPTY_STRING, empty.toString());
         assertEquals("0", fret.toString());
+        assertEquals(Note.EMPTY_STRING, invalidFret.toString());
     }
 
     @Test

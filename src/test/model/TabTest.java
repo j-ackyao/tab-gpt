@@ -27,7 +27,7 @@ class TabTest {
         tab.addChord(g9Chord);
         tab.addChord(g9Chord);
         g9Chord.editNote(3, 1); // becomes m9
-        System.out.println(tab.toString());
+        System.out.println(tab);
     }
 
 
