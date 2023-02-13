@@ -54,7 +54,7 @@ public class Tab {
      * @EFFECTS: returns the Tab as string represented in tab notation with or without chord number pos
      */
     public String toString(boolean chordPos) {
-        String[] output = new String[size + (chordPos? 1 : 0)];
+        String[] output = new String[size + (chordPos ? 1 : 0)];
 
         for (int i = 0; i < tuning.length; i++) {
             // 2 represents the longest possible string length for tuning, eg. Bb.
@@ -62,7 +62,7 @@ public class Tab {
             output[i] = tuning[i] + (tuning[i].length() < 2 ? " " : "") + "|" + repeat(CHORD_SPACING, CHORD_SPACER);
         }
 
-        if (chordPos){
+        if (chordPos) {
             // 3 represents the string tuning and | line
             output[size] = repeat(3 + CHORD_SPACING, " ");
         }
@@ -81,7 +81,7 @@ public class Tab {
 
             }
 
-            if(chordPos) {
+            if (chordPos) {
                 output[size] += i + repeat(CHORD_SPACING + noteMaxLength - Integer.toString(i).length(), " ");
             }
         }
