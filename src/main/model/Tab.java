@@ -11,10 +11,15 @@ public class Tab {
 
     public static final String[] STANDARD_TUNING = {"E", "B", "G", "D", "A", "E"};
 
+    // the following constants can be changed
+    // the amount of EMPTY_SPACE to be placed in between chords
+    public static final int CHORD_SPACING = 3;
+    // the string to be used to space out chords
+    public static String CHORD_SPACER = Note.EMPTY_STRING;
+
     private final ArrayList<Chord> chords;
     public final int size;
     public final String[] tuning;
-    //TODO ADD TAB SPACING AS CONSTANT AND REFORMAT TOSTRING
 
     /**
      * @REQUIRES: size  > 0
@@ -48,36 +53,37 @@ public class Tab {
      */
     public String toString(boolean chordPos) {
         String[] output = new String[size + (chordPos? 1 : 0)];
-        Arrays.fill(output, "");
-
-        if (chordPos){
-            output[size] += "    ";
-        }
 
         for (int i = 0; i < tuning.length; i++) {
-            output[i] += tuning[i] + "|";
+            // 2 represents the longest possible string length for tuning, eg. Bb. If less than two, add space to align text
+            output[i] = tuning[i] + (tuning[i].length() < 2 ? " " : "") + "|" + CHORD_SPACER.repeat(CHORD_SPACING);
+        }
+
+        if (chordPos){
+            // 3 represents the string tuning and | line
+            output[size] = " ".repeat(3 + CHORD_SPACING);
         }
 
         for (int i = 0; i < chords.size(); i++) {
             Chord c = chords.get(i);
-            boolean wide = c.containsWideFret();
+            // getting the longest note's string in chord
+            int noteMaxLength = Arrays.stream(c.getNotes())
+                    .map(Note::toString)
+                    .reduce((a, b) -> a.length() > b.length() ? a : b)
+                    .get().length();
+
             for (int j = 0; j < size; j++) {
                 Note n = c.getNote(j);
-                output[j] += Note.EMPTY_STRING + Note.EMPTY_STRING + n;
-
-                if (wide) {
-                    output[j] += n.getFret() < 10 ? Note.EMPTY_STRING : "";
-                }
-
+                output[j] += n + CHORD_SPACER.repeat(CHORD_SPACING + noteMaxLength - n.toString().length());
 
             }
 
             if(chordPos) {
-                output[size] += i + (wide && i < 10? "   " : "  ");
+                output[size] += i + " ".repeat(CHORD_SPACING + noteMaxLength - Integer.toString(i).length());
             }
         }
 
-        return String.join(Note.EMPTY_STRING + "\n", output) + (chordPos? "" : Note.EMPTY_STRING);
+        return String.join("\n", output) + (chordPos? "" : CHORD_SPACER);
     }
 
     /**
