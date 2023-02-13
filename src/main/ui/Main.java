@@ -9,7 +9,7 @@ public class Main {
         Chord customChord = new Chord(new int[]{3, 3, 0, 0, 2, 3});
         tab.addChord(customChord);
 
-        customChord.editNote(1, 2);
+        customChord.editNote(1, 22);
 
         tab.addChord(customChord);
         for (int i = 0; i < 10; i++) {

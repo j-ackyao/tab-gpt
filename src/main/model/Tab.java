@@ -15,11 +15,12 @@ public class Tab {
     // the amount of EMPTY_SPACE to be placed in between chords
     public static final int CHORD_SPACING = 3;
     // the string to be used to space out chords
-    public static String CHORD_SPACER = Note.EMPTY_STRING;
+    public static final String CHORD_SPACER = Note.EMPTY_STRING;
 
+    // private so that it can't be modified outside
     private final ArrayList<Chord> chords;
+    private final String[] tuning;
     public final int size;
-    public final String[] tuning;
 
     /**
      * @REQUIRES: size  > 0
@@ -70,7 +71,7 @@ public class Tab {
             int noteMaxLength = Arrays.stream(c.getNotes())
                     .map(Note::toString)
                     .reduce((a, b) -> a.length() > b.length() ? a : b)
-                    .get().length();
+                    .orElse(" ").length();
 
             for (int j = 0; j < size; j++) {
                 Note n = c.getNote(j);
@@ -83,7 +84,7 @@ public class Tab {
             }
         }
 
-        return String.join("\n", output) + (chordPos? "" : CHORD_SPACER);
+        return String.join("\n", output);
     }
 
     /**
@@ -98,11 +99,11 @@ public class Tab {
 
     /**
      * @REQUIRES: chord.size == this.size
-     * @EFFECTS: adds given Chord to end of tab's list of Chord WITH reference
+     * @EFFECTS: adds given Chord to end of tab's list of Chord
      * @MODIFIES: this
      */
     public void addChord(Chord chord) {
-        chords.add(chord);
+        chords.add(chord.cloneChord());
     }
 
     /**
@@ -118,11 +119,11 @@ public class Tab {
 
     /**
      * @REQUIRES: pos >= 0, chord.size == this.size
-     * @EFFECTS: inserts given Chord at given position of list of Chords WITH reference
+     * @EFFECTS: inserts given Chord at given position of list of Chords
      * @MODIFIES: this
      */
     public void insertChord(int pos, Chord chord) {
-        chords.add(pos, chord);
+        chords.add(pos, chord.cloneChord());
     }
 
     /**
@@ -136,11 +137,11 @@ public class Tab {
 
     /**
      * @REQUIRES: pos >= 0, chord.size == this.size
-     * @EFFECTS: edits the Chord at given position to given chord WITH reference
+     * @EFFECTS: edits the Chord at given position to given chord
      * @MODIFIES: this
      */
     public void editChord(int pos, Chord chord) {
-        chords.set(pos, chord);
+        chords.set(pos, chord.cloneChord());
     }
 
     /**
@@ -150,6 +151,10 @@ public class Tab {
      */
     public Chord removeChord(int pos) {
         return chords.remove(pos);
+    }
+
+    public String[] getTuning() {
+        return tuning.clone();
     }
 
     public ArrayList<Chord> getChords() {

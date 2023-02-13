@@ -58,7 +58,7 @@ public class Chord {
     /**
      * @REQUIRES: elements of notes must be valid fret
      * @EFFECTS: modifies the notes of this given list of frets
-     *          if given notes are less than lines, rest of this.notes are edited to Note.EMPTY
+     * if given notes are less than lines, rest of this.notes are edited to Note.EMPTY
      * @MODIFIES: this
      */
     public void editNotes(int[] frets) {
@@ -71,16 +71,16 @@ public class Chord {
         }
     }
 
-    /**
-     * @EFFECTS: determines if there is a note that has two digits or more, used for formatting text tab
-     */
-    public boolean containsWideFret() {
-        for (Note n : notes) {
-            if (n.getFret() >= 10) {
-                return true;
-            }
+    public int getFret(int string) {
+        return notes[string].getFret();
+    }
+
+    public int[] getFrets() {
+        int[] frets = new int[size];
+        for (int i = 0; i < size; i++) {
+            frets[i] = getFret(i);
         }
-        return false;
+        return frets;
     }
 
     public Note getNote(int string) {

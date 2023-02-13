@@ -11,16 +11,26 @@ public class ChordTest {
 
     @BeforeEach
     void testInit() {
-        chord = new Chord(4);
+        chord = new Chord(6);
     }
 
     @Test
-    void testConstructor() {
+    void testConstructorSize() {
         Chord chord = new Chord(3);
         assertEquals(3, chord.getNotes().length);
-        assertEquals(Note.EMPTY, chord.getNotes()[0].getFret());
-        assertEquals(Note.EMPTY, chord.getNotes()[1].getFret());
-        assertEquals(Note.EMPTY, chord.getNotes()[2].getFret());
+        for (int i = 0; i < chord.size; i++) {
+            assertEquals(Note.EMPTY, chord.getNotes()[i].getFret());
+        }
+    }
+
+    @Test
+    void testConstructorFrets() {
+        int[] frets = new int[]{1,2,4,5,3,7};
+        Chord chord = new Chord(frets);
+        assertEquals(6, chord.getNotes().length);
+        for (int i = 0; i < frets.length; i++) {
+            assertEquals(frets[i], chord.getFret(i));
+        }
     }
 
     @Test
@@ -45,8 +55,10 @@ public class ChordTest {
     void testEditNotesOver() {
         chord.editNotes(new int[]{3, 2, 1, 4, 0, 5});
         Note[] notes = chord.getNotes();
-        assertEquals(3, notes[0].getFret());
-        assertEquals(4, notes[3].getFret());
+        assertEquals(6, chord.getNotes().length);
+        for (int i = 0; i < chord.size; i++) {
+            assertEquals(notes[i].getFret(), chord.getFret(i));
+        }
     }
 
     @Test
