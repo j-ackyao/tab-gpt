@@ -2,6 +2,7 @@ package model;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 
 /**
  * Tab represents the tab, hold an ArrayList of Chords in order
@@ -56,13 +57,14 @@ public class Tab {
         String[] output = new String[size + (chordPos? 1 : 0)];
 
         for (int i = 0; i < tuning.length; i++) {
-            // 2 represents the longest possible string length for tuning, eg. Bb. If less than two, add space to align text
-            output[i] = tuning[i] + (tuning[i].length() < 2 ? " " : "") + "|" + CHORD_SPACER.repeat(CHORD_SPACING);
+            // 2 represents the longest possible string length for tuning, eg. Bb.
+            // If less than two, add space to align text
+            output[i] = tuning[i] + (tuning[i].length() < 2 ? " " : "") + "|" + repeat(CHORD_SPACING, CHORD_SPACER);
         }
 
         if (chordPos){
             // 3 represents the string tuning and | line
-            output[size] = " ".repeat(3 + CHORD_SPACING);
+            output[size] = repeat(3 + CHORD_SPACING, " ");
         }
 
         for (int i = 0; i < chords.size(); i++) {
@@ -75,16 +77,23 @@ public class Tab {
 
             for (int j = 0; j < size; j++) {
                 Note n = c.getNote(j);
-                output[j] += n + CHORD_SPACER.repeat(CHORD_SPACING + noteMaxLength - n.toString().length());
+                output[j] += n + repeat(CHORD_SPACING + noteMaxLength - n.toString().length(), CHORD_SPACER);
 
             }
 
             if(chordPos) {
-                output[size] += i + " ".repeat(CHORD_SPACING + noteMaxLength - Integer.toString(i).length());
+                output[size] += i + repeat(CHORD_SPACING + noteMaxLength - Integer.toString(i).length(), " ");
             }
         }
 
         return String.join("\n", output);
+    }
+
+    /**
+     * @EFFECTS: returns String s repeated n times
+     */
+    private String repeat(int n, String s) {
+        return String.join("", Collections.nCopies(n, s));
     }
 
     /**
