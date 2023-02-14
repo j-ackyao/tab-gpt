@@ -7,7 +7,7 @@ import java.util.Arrays;
 import java.util.Scanner;
 
 /**
- * The console editor for a tab
+ * The console editor for tab
  */
 public class ConsoleEditor {
 
@@ -25,7 +25,8 @@ public class ConsoleEditor {
      * @MODIFIES: this
      */
     private void init() {
-        print("Input the tuning of the strings of tab in the proper form, or enter to use standard tuning");
+        print("Input the tuning of the strings of tab in the form X-X-X-..., or enter to use standard tuning");
+        // may include capitalized characters
         String tuning = input.nextLine();
         if ("".equals(tuning)) {
             print("Using standard tuning");
@@ -51,39 +52,45 @@ public class ConsoleEditor {
         while (!exit) {
             String[] cmd = readInput().split(" ");
             String[] args = Arrays.copyOfRange(cmd, 1, cmd.length);
-            switch (cmd[0]) {
-                case "exit":
-                    exit = true;
-                    break;
-                case "add":
-                case "a":
-                    consoleAddChord(args);
-                    break;
-                case "insert":
-                case "i":
-                    consoleInsertChord(args);
-                    break;
-                case "edit":
-                case "e":
-                    consoleEditChord(args);
-                    break;
-                case "delete":
-                case "d":
-                    consoleDeleteChord(args);
-                    break;
-                case "copypaste":
-                case "cp":
-                    consoleCopyPaste(args);
-                    break;
-                case "help":
-                case "h":
-                    help(args);
-                    break;
-                case "":
-                    print(tab);
-                    break;
-                default:
-                    print("Command not found");
+            // try catches around user input, just to prevent invalid input and program crashing
+            // no specific behaviour for methods needed
+            try {
+                switch (cmd[0]) {
+                    case "exit":
+                        exit = true;
+                        break;
+                    case "add":
+                    case "a":
+                        consoleAddChord(args);
+                        break;
+                    case "insert":
+                    case "i":
+                        consoleInsertChord(args);
+                        break;
+                    case "edit":
+                    case "e":
+                        consoleEditChord(args);
+                        break;
+                    case "delete":
+                    case "d":
+                        consoleDeleteChord(args);
+                        break;
+                    case "copypaste":
+                    case "cp":
+                        consoleCopyPaste(args);
+                        break;
+                    case "help":
+                    case "h":
+                        help(args);
+                        break;
+                    case "":
+                        print(tab);
+                        break;
+                    default:
+                        print("Command not found");
+                }
+            } catch (Exception e) {
+                handleException(e);
             }
         }
     }
@@ -106,22 +113,18 @@ public class ConsoleEditor {
      * @MODIFIES: this
      */
     void consoleInsertChord(String[] args) {
-        try {
-            switch (args.length) {
-                case 0:
-                    print("Please input the position to insert chord (and chord in proper form");
-                    break;
-                case 1:
-                    tab.insertChord(Integer.parseInt(args[0]));
-                    break;
-                case 2:
-                    tab.insertChord(Integer.parseInt(args[0])).editNotes(formatToFrets(args[1]));
-                    break;
-            }
-            print(tab.toString(true));
-        } catch (IndexOutOfBoundsException i) {
-            handleException(i);
+        switch (args.length) {
+            case 0:
+                print("Please input the position to insert chord (and chord in form X-X-X-...");
+                break;
+            case 1:
+                tab.insertChord(Integer.parseInt(args[0]));
+                break;
+            case 2:
+                tab.insertChord(Integer.parseInt(args[0])).editNotes(formatToFrets(args[1]));
+                break;
         }
+        print(tab.toString(true));
     }
 
     /**
@@ -129,16 +132,12 @@ public class ConsoleEditor {
      * @MODIFIES: this
      */
     void consoleEditChord(String[] args) {
-        try {
-            if (args.length < 2) {
-                print("Please provide the position of the chord and the frets in proper form");
-            } else {
-                tab.editChord(Integer.parseInt(args[0]), formatToFrets(args[1]));
-            }
-            print(tab.toString(true));
-        } catch (IndexOutOfBoundsException i) {
-            handleException(i);
+        if (args.length < 2) {
+            print("Please provide the position of the chord and the frets in the form X-X-X-...");
+        } else {
+            tab.editChord(Integer.parseInt(args[0]), formatToFrets(args[1]));
         }
+        print(tab.toString(true));
     }
 
     /**
@@ -146,16 +145,12 @@ public class ConsoleEditor {
      * @MODIFIES: this
      */
     void consoleDeleteChord(String[] args) {
-        try {
-            if (args.length == 0) {
-                tab.removeChord(tab.getLength() - 1);
-            } else {
-                tab.removeChord(Integer.parseInt(args[0]));
-            }
-            print(tab.toString(true));
-        } catch (IndexOutOfBoundsException i) {
-            handleException(i);
+        if (args.length == 0) {
+            tab.removeChord(tab.getLength() - 1);
+        } else {
+            tab.removeChord(Integer.parseInt(args[0]));
         }
+        print(tab.toString(true));
     }
 
     /**
@@ -163,28 +158,24 @@ public class ConsoleEditor {
      * @MODIFIES: this
      */
     void consoleCopyPaste(String[] args) {
-        try {
-            if (args.length == 0) {
-                tab.removeChord(tab.getLength() - 1);
-            } else {
-                tab.removeChord(Integer.parseInt(args[0]));
-            }
-            print(tab.toString(true));
-        } catch (IndexOutOfBoundsException i) {
-            handleException(i);
+        if (args.length == 0) {
+            tab.removeChord(tab.getLength() - 1);
+        } else {
+            tab.removeChord(Integer.parseInt(args[0]));
         }
+        print(tab.toString(true));
     }
 
     /**
-     * @EFFECTS: returns general help instructions or for specified commands
+     * @EFFECTS: prints general help instructions or for specified commands
      */
     // Suppressed as this method is just a list of commands for help
     @SuppressWarnings("methodlength")
     void help(String[] args) {
         if (args.length == 0) {
-            print("Proper form: X-X-X-.... 'e' for empty, 'x' for mute");
+            print("Form for fret input: X-X-X-... 'e' for empty, 'x' for mute");
             print("For more additional info about command: help <command>");
-            print("Available commands: (a)dd, (i)nsert, (e)dit, ");
+            print("Available commands: (a)dd, (i)nsert, (e)dit, (d)elete, (c)opypaste");
         } else {
             switch (args[0]) {
                 case "a":
@@ -213,6 +204,9 @@ public class ConsoleEditor {
         }
     }
 
+    /**
+     * @EFFECTS: converts given string form arg into valid frets, otherwise NumberFormatException is thrown
+     */
     private int[] formatToFrets(String string) {
         String[] strings = string.split("-");
         int[] frets = new int[strings.length];
@@ -225,27 +219,33 @@ public class ConsoleEditor {
                     frets[i] = Note.MUTE;
                     break;
                 default:
-                    try {
-                        frets[i] = Integer.parseInt(strings[i]);
-                    } catch (NumberFormatException e) {
-                        frets[i] = Note.EMPTY;
-                    }
+                    frets[i] = Integer.parseInt(strings[i]);
             }
         }
         return frets;
     }
 
+    /**
+     * @EFFECTS: handles exceptions arisen from user input with general behaviour
+     */
     private void handleException(Exception e) {
         if (e instanceof IndexOutOfBoundsException) {
             print("Given position invalid, action failed");
+        } else if (e instanceof NumberFormatException) {
+            print("Given string when expected number, action failed");
         }
     }
 
-
+    /**
+     * @EFFECTS: just to simplify the print to console
+     */
     private void print(Object obj) {
         System.out.println(obj);
     }
 
+    /**
+     * @EFFECTS: reads input and converts to lower case
+     */
     private String readInput() {
         return input.nextLine().toLowerCase();
     }
