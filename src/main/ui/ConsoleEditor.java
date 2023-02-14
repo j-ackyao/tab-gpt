@@ -11,8 +11,8 @@ import java.util.Scanner;
  */
 public class ConsoleEditor {
 
-    private Tab tab;
     Scanner input;
+    private Tab tab;
 
     public ConsoleEditor() {
         input = new Scanner(System.in);
@@ -20,9 +20,13 @@ public class ConsoleEditor {
         run();
     }
 
+    /**
+     * @EFFECTS: helper for constructor to handle user input and generate new Tab
+     * @MODIFIES: this
+     */
     private void init() {
         print("Input the tuning of the strings of tab in the proper form, or enter to use standard tuning");
-        String tuning = readInput();
+        String tuning = input.nextLine();
         if ("".equals(tuning)) {
             print("Using standard tuning");
             tab = new Tab();
@@ -35,6 +39,12 @@ public class ConsoleEditor {
         print(tab);
     }
 
+
+    /**
+     * @EFFECTS: handles all user inputs
+     * @MODIFIES: this
+     */
+    // Suppressed as this handles all possible commands
     @SuppressWarnings("methodlength")
     void run() {
         boolean exit = false;
@@ -47,75 +57,129 @@ public class ConsoleEditor {
                     break;
                 case "add":
                 case "a":
-                    addChord(args);
-                    print(tab.toString(true));
+                    consoleAddChord(args);
                     break;
                 case "insert":
                 case "i":
-                    insertChord(args);
-                    print(tab.toString(true));
+                    consoleInsertChord(args);
                     break;
                 case "edit":
                 case "e":
-                    editChord(args);
-                    print(tab.toString(true));
+                    consoleEditChord(args);
                     break;
                 case "delete":
                 case "d":
-                    deleteChord(args);
-                    print(tab.toString(true));
+                    consoleDeleteChord(args);
+                    break;
+                case "copypaste":
+                case "cp":
+                    consoleCopyPaste(args);
                     break;
                 case "help":
                 case "h":
                     help(args);
                     break;
-                default:
+                case "":
                     print(tab);
+                    break;
+                default:
+                    print("Command not found");
             }
         }
     }
-    // todo add cp (copy paste) cr (copy replace) xp (cut paste) xr (cut replace)
 
-    void addChord(String[] args) {
+    /**
+     * @EFFECTS: adds empty chord/given frets to end of tab
+     * @MODIFIES: this
+     */
+    void consoleAddChord(String[] args) {
         if (args.length == 0) {
             tab.addChord();
         } else {
             tab.addChord().editNotes(formatToFrets(args[0]));
         }
+        print(tab.toString(true));
     }
 
-    //todo index out of bounds
-    void insertChord(String[] args) {
-        switch (args.length) {
-            case 0:
-                print("Please input the position to insert chord (and chord in proper form");
-                break;
-            case 1:
-                tab.insertChord(Integer.parseInt(args[0]));
-                break;
-            case 2:
-                tab.insertChord(Integer.parseInt(args[0])).editNotes(formatToFrets(args[1]));
-                break;
+    /**
+     * @EFFECTS: inserts at pos (first arg) with empty chord/given frets (second arg)
+     * @MODIFIES: this
+     */
+    void consoleInsertChord(String[] args) {
+        try {
+            switch (args.length) {
+                case 0:
+                    print("Please input the position to insert chord (and chord in proper form");
+                    break;
+                case 1:
+                    tab.insertChord(Integer.parseInt(args[0]));
+                    break;
+                case 2:
+                    tab.insertChord(Integer.parseInt(args[0])).editNotes(formatToFrets(args[1]));
+                    break;
+            }
+            print(tab.toString(true));
+        } catch (IndexOutOfBoundsException i) {
+            handleException(i);
         }
     }
 
-    // todo index out of bounds
-    void editChord(String[] args) {
-        if (args.length < 2) {
-            print("Please provide the position of the chord and the frets in proper form");
-        } else {
-            tab.editChord(Integer.parseInt(args[0]), formatToFrets(args[1]));
+    /**
+     * @EFFECTS: edits chord at given pos (first arg) to given frets (second arg)
+     * @MODIFIES: this
+     */
+    void consoleEditChord(String[] args) {
+        try {
+            if (args.length < 2) {
+                print("Please provide the position of the chord and the frets in proper form");
+            } else {
+                tab.editChord(Integer.parseInt(args[0]), formatToFrets(args[1]));
+            }
+            print(tab.toString(true));
+        } catch (IndexOutOfBoundsException i) {
+            handleException(i);
         }
     }
 
-    void deleteChord(String[] args) {
-        if (args.length == 0) {
-            tab.removeChord(tab.getLength() - 1);
-        } else {
-            tab.removeChord(Integer.parseInt(args[0]));
+    /**
+     * @EFFECTS: deletes chord at end of tab or at specified position (first arg)
+     * @MODIFIES: this
+     */
+    void consoleDeleteChord(String[] args) {
+        try {
+            if (args.length == 0) {
+                tab.removeChord(tab.getLength() - 1);
+            } else {
+                tab.removeChord(Integer.parseInt(args[0]));
+            }
+            print(tab.toString(true));
+        } catch (IndexOutOfBoundsException i) {
+            handleException(i);
         }
     }
 
+    /**
+     * @EFFECTS: copies chord at position (first arg) and paste at position (second arg)
+     * @MODIFIES: this
+     */
+    void consoleCopyPaste(String[] args) {
+        try {
+            if (args.length == 0) {
+                tab.removeChord(tab.getLength() - 1);
+            } else {
+                tab.removeChord(Integer.parseInt(args[0]));
+            }
+            print(tab.toString(true));
+        } catch (IndexOutOfBoundsException i) {
+            handleException(i);
+        }
+    }
+
+    /**
+     * @EFFECTS: returns general help instructions or for specified commands
+     */
+    // Suppressed as this method is just a list of commands for help
+    @SuppressWarnings("methodlength")
     void help(String[] args) {
         if (args.length == 0) {
             print("Proper form: X-X-X-.... 'e' for empty, 'x' for mute");
@@ -133,7 +197,15 @@ public class ConsoleEditor {
                     break;
                 case "e":
                 case "edit":
-                    print("Edits chord at given position: edit <position> [frets]");
+                    print("Edits chord at given position: edit <position> <frets>");
+                    break;
+                case "d":
+                case "delete":
+                    print("Deletes chord at end or given position: delete [position]");
+                    break;
+                case "cp":
+                case "copypaste":
+                    print("Copies and pastes chord at given positions: copypaste <position1> <position2>");
                     break;
                 default:
                     print("Command not found");
@@ -163,7 +235,13 @@ public class ConsoleEditor {
         return frets;
     }
 
-    // saves from typing print
+    private void handleException(Exception e) {
+        if (e instanceof IndexOutOfBoundsException) {
+            print("Given position invalid, action failed");
+        }
+    }
+
+
     private void print(Object obj) {
         System.out.println(obj);
     }
