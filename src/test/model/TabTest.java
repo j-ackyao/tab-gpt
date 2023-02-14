@@ -16,7 +16,7 @@ class TabTest {
 
     @BeforeEach
     void testInit() {
-        tab = new Tab(6);
+        tab = new Tab();
         chord = new Chord(new int[]{3, 12, 0, 0, 2, 3});
         altChord = new Chord(new int[]{0, 1, 2, 2, 0, Note.EMPTY});
 
@@ -25,9 +25,9 @@ class TabTest {
     }
 
     @Test
-    void testConstructorSize() {
-        Tab tab = new Tab(10);
-        assertEquals(10, tab.size);
+    void testConstructorStandard() {
+        Tab tab = new Tab();
+        assertEquals(6, tab.size);
         assertArrayEquals(Tab.STANDARD_TUNING, tab.getTuning());
         assertEquals(new ArrayList<Chord>(), tab.getChords());
     }
@@ -45,13 +45,16 @@ class TabTest {
     void testToString() {
         // testing with Tab.CHORD_SPACING = 3
         // and Tab.CHORD_SPACER = Note.EMPTY_STRING
+        Tab tab = new Tab(new String[]{"E", "F", "G", "Cb", "Ab", "D"});
+        tab.addChord(chord);
+        tab.addChord(chord);
         String expected =
-                "E |---3----3----\n" +
-                "B |---12---12---\n" +
-                "G |---0----0----\n" +
-                "D |---0----0----\n" +
-                "A |---2----2----\n" +
-                "E |---3----3----";
+                "E  |---3----3----\n" +
+                        "F  |---12---12---\n" +
+                        "G  |---0----0----\n" +
+                        "Cb |---0----0----\n" +
+                        "Ab |---2----2----\n" +
+                        "D  |---3----3----";
         assertEquals(expected, tab.toString());
     }
 
@@ -66,13 +69,44 @@ class TabTest {
         }
         String expected =
                 "E |---3----3----0---0---0---0---0---0---0---0---0---0---\n" +
-                "B |---12---12---1---1---1---1---1---1---1---1---1---1---\n" +
-                "G |---0----0----2---2---2---2---2---2---2---2---2---2---\n" +
-                "D |---0----0----2---2---2---2---2---2---2---2---2---2---\n" +
-                "A |---2----2----0---0---0---0---0---0---0---0---0---0---\n" +
-                "E |---3----3--------------------------------------------\n" +
-                "      0    1    2   3   4   5   6   7   8   9   10  11  ";
+                        "B |---12---12---1---1---1---1---1---1---1---1---1---1---\n" +
+                        "G |---0----0----2---2---2---2---2---2---2---2---2---2---\n" +
+                        "D |---0----0----2---2---2---2---2---2---2---2---2---2---\n" +
+                        "A |---2----2----0---0---0---0---0---0---0---0---0---0---\n" +
+                        "E |---3----3--------------------------------------------\n" +
+                        "      0    1    2   3   4   5   6   7   8   9   10  11  ";
         assertEquals(expected, tab.toString(true));
+    }
+
+    @Test
+    void testToStringSmallerChord() {
+        // testing with Tab.CHORD_SPACING = 3
+        // and Tab.CHORD_SPACER = Note.EMPTY_STRING
+        Tab tab = new Tab(new String[]{"E", "F", "G", "Cb", "Ab", "D", "B", "A"});
+        tab.addChord(chord);
+        tab.addChord(chord);
+        String expected = "E  |---3----3----\n" +
+                "F  |---12---12---\n" +
+                "G  |---0----0----\n" +
+                "Cb |---0----0----\n" +
+                "Ab |---2----2----\n" +
+                "D  |---3----3----\n" +
+                "B  |-------------\n" +
+                "A  |-------------";
+        assertEquals(expected, tab.toString());
+    }
+
+    @Test
+    void testToStringLargerChord() {
+        // testing with Tab.CHORD_SPACING = 3
+        // and Tab.CHORD_SPACER = Note.EMPTY_STRING
+        Tab tab = new Tab(new String[]{"E", "F", "G"});
+        tab.addChord(chord);
+        tab.addChord(chord);
+        String expected = "E |---3----3----\n" +
+                "F |---12---12---\n" +
+                "G |---0----0----";
+        assertEquals(expected, tab.toString());
     }
 
     @Test
@@ -132,4 +166,25 @@ class TabTest {
         assertArrayEquals(altChord.getFrets(), tab.getChords().get(0).getFrets());
     }
 
+
+    @Test
+    void testGetChord() {
+        tab.addChord(altChord);
+        assertArrayEquals(chord.getFrets(), tab.getChord(1).getFrets());
+        assertArrayEquals(altChord.getFrets(), tab.getChord(2).getFrets());
+    }
+
+    @Test
+    void testGetChords() {
+        tab.insertChord(0, altChord);
+        ArrayList<Chord> gotChords = tab.getChords();
+        for (int i = 0; i < tab.getLength(); i++) {
+            assertArrayEquals(gotChords.get(i).getFrets(), tab.getChord(i).getFrets());
+        }
+    }
+
+    @Test
+    void testGetLength() {
+        assertEquals(2, tab.getLength());
+    }
 }

@@ -17,19 +17,18 @@ public class Tab {
     public static final int CHORD_SPACING = 3;
     // the string to be used to space out chords
     public static final String CHORD_SPACER = Note.EMPTY_STRING;
-
+    // the number of guitar strings of tab
+    public final int size;
     // private so that it can't be modified outside
     private final ArrayList<Chord> chords;
     private final String[] tuning;
-    public final int size;
 
     /**
-     * @REQUIRES: size  > 0
-     * @EFFECTS: constructs tab by instantiating a new arraylist of segments with standard tuning
+     * @EFFECTS: constructs tab by instantiating a new arraylist of chord with standard tuning
      */
-    public Tab(int size) {
+    public Tab() {
         this.chords = new ArrayList<>();
-        this.size = size;
+        this.size = STANDARD_TUNING.length;
         this.tuning = STANDARD_TUNING;
     }
 
@@ -56,29 +55,29 @@ public class Tab {
     public String toString(boolean chordPos) {
         String[] output = new String[size + (chordPos ? 1 : 0)];
 
+        // 1 is for more aesthetic spacing
+        int tuningMaxLength = 1 + Arrays.stream(tuning)
+                .map(String::length).reduce((a, b) -> a > b ? a : b).orElse(1);
+
         for (int i = 0; i < tuning.length; i++) {
-            // 2 represents the longest possible string length for tuning, eg. Bb.
-            // If less than two, add space to align text
-            output[i] = tuning[i] + (tuning[i].length() < 2 ? " " : "") + "|" + repeat(CHORD_SPACING, CHORD_SPACER);
+            output[i] = tuning[i] + repeat(tuningMaxLength - tuning[i].length(), " ")
+                    + "|" + repeat(CHORD_SPACING, CHORD_SPACER);
         }
 
         if (chordPos) {
-            // 3 represents the string tuning and | line
-            output[size] = repeat(3 + CHORD_SPACING, " ");
+            // 1 represents the space for the |
+            output[size] = repeat(tuningMaxLength + 1 + CHORD_SPACING, " ");
         }
 
         for (int i = 0; i < chords.size(); i++) {
             Chord c = chords.get(i);
             // getting the longest note's string in chord
             int noteMaxLength = Arrays.stream(c.getNotes())
-                    .map(Note::toString)
-                    .reduce((a, b) -> a.length() > b.length() ? a : b)
-                    .orElse(" ").length();
+                    .map(a -> a.toString().length()).reduce((a, b) -> a > b ? a : b).orElse(1);
 
             for (int j = 0; j < size; j++) {
-                Note n = c.getNote(j);
-                output[j] += n + repeat(CHORD_SPACING + noteMaxLength - n.toString().length(), CHORD_SPACER);
-
+                output[j] += (j < c.size ? c.getNote(j) : Note.EMPTY_STRING) + repeat(CHORD_SPACING + noteMaxLength
+                        - (j < c.size ? c.getNote(j).toString().length() : 1), CHORD_SPACER);
             }
 
             if (chordPos) {
@@ -107,7 +106,6 @@ public class Tab {
     }
 
     /**
-     * @REQUIRES: chord.size == this.size
      * @EFFECTS: adds given Chord to end of tab's list of Chord
      * @MODIFIES: this
      */
@@ -155,7 +153,7 @@ public class Tab {
 
     /**
      * @REQUIRES: pos >= 0
-     * @EFFECTS: removes a chord from pos given position and returns it
+     * @EFFECTS: removes a Chord from pos given position and returns it
      * @MODIFIES: this
      */
     public Chord removeChord(int pos) {
@@ -166,8 +164,24 @@ public class Tab {
         return tuning.clone();
     }
 
+    /**
+     * @REQUIRES: pos >= 0, this.chords.size > 0
+     * @EFFECTS: returns the Chord at given position without reference
+     */
+    public Chord getChord(int pos) {
+        return chords.get(pos).cloneChord();
+    }
+
     public ArrayList<Chord> getChords() {
         return new ArrayList<>(this.chords);
+    }
+
+    /**
+     *
+     * @EFFECTS: returns the number of chords in tabs
+     */
+    public int getLength() {
+        return chords.size();
     }
 
 }

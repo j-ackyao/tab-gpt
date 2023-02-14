@@ -76,4 +76,5 @@ public class ChordTest {
         assertEquals(4, clone.getNote(2).getFret());
     }
 
+
 }
