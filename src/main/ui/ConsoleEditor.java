@@ -14,8 +14,11 @@ public class ConsoleEditor {
     Scanner input;
     private Tab tab;
 
+    /**
+     * @EFFECTS: constructor for ConsoleEditor, prompts user to input tab tuning and calls run()
+     */
     public ConsoleEditor() {
-        input = new Scanner(System.in);
+        this.input = new Scanner(System.in);
         init();
         run();
     }
@@ -115,16 +118,17 @@ public class ConsoleEditor {
     void consoleInsertChord(String[] args) {
         switch (args.length) {
             case 0:
-                print("Please input the position to insert chord (and chord in form X-X-X-...");
+                print("Please input the position to insert chord [and chord in form X-X-X-...]");
                 break;
             case 1:
                 tab.insertChord(Integer.parseInt(args[0]));
+                print(tab.toString(true));
                 break;
             case 2:
                 tab.insertChord(Integer.parseInt(args[0])).editNotes(formatToFrets(args[1]));
+                print(tab.toString(true));
                 break;
         }
-        print(tab.toString(true));
     }
 
     /**
@@ -136,8 +140,8 @@ public class ConsoleEditor {
             print("Please provide the position of the chord and the frets in the form X-X-X-...");
         } else {
             tab.editChord(Integer.parseInt(args[0]), formatToFrets(args[1]));
+            print(tab.toString(true));
         }
-        print(tab.toString(true));
     }
 
     /**
@@ -154,16 +158,16 @@ public class ConsoleEditor {
     }
 
     /**
-     * @EFFECTS: copies chord at position (first arg) and paste at position (second arg)
+     * @EFFECTS: copies chord at position (first arg) and inserts at position (second arg)
      * @MODIFIES: this
      */
     void consoleCopyPaste(String[] args) {
-        if (args.length == 0) {
-            tab.removeChord(tab.getLength() - 1);
+        if (args.length < 2) {
+            print("Please provide two positions to copy from and paste to");
         } else {
-            tab.removeChord(Integer.parseInt(args[0]));
+            tab.insertChord(Integer.parseInt(args[1]), tab.getChord(Integer.parseInt(args[0])));
+            print(tab.toString(true));
         }
-        print(tab.toString(true));
     }
 
     /**
@@ -173,9 +177,9 @@ public class ConsoleEditor {
     @SuppressWarnings("methodlength")
     void help(String[] args) {
         if (args.length == 0) {
-            print("Form for fret input: X-X-X-... 'e' for empty, 'x' for mute");
+            print("Form for fret input: X-X-X-... 'e' or '' (nothing) for empty, 'x' for mute");
             print("For more additional info about command: help <command>");
-            print("Available commands: (a)dd, (i)nsert, (e)dit, (d)elete, (c)opypaste");
+            print("Available commands: (a)dd, (i)nsert, (e)dit, (d)elete, (c)opy(p)aste");
         } else {
             switch (args[0]) {
                 case "a":
@@ -212,6 +216,7 @@ public class ConsoleEditor {
         int[] frets = new int[strings.length];
         for (int i = 0; i < strings.length; i++) {
             switch (strings[i]) {
+                case "":
                 case "e":
                     frets[i] = Note.EMPTY;
                     break;
@@ -230,9 +235,9 @@ public class ConsoleEditor {
      */
     private void handleException(Exception e) {
         if (e instanceof IndexOutOfBoundsException) {
-            print("Given position invalid, action failed");
+            print("Given position invalid/out of bounds, action failed");
         } else if (e instanceof NumberFormatException) {
-            print("Given string when expected number, action failed");
+            print("Given string/invalid number when expected integer, action failed");
         }
     }
 

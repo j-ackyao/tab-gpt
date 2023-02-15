@@ -2,10 +2,11 @@ package model;
 
 
 /**
- * Chord represents a chord/a column of notes, holds an array of Note in order
+ * Chord represents a chord/a column of notes, holds an array of Note in order from top to bottom
  */
 public class Chord {
 
+    // number of strings in Chord
     public final int size;
 
     // ArrayList is not necessary for Chord as the list will always be fixed size
@@ -14,6 +15,7 @@ public class Chord {
     /**
      * @REQUIRES: size > 0
      * @EFFECTS: constructor for a Chord given number of strings (size), all strings are empty
+     * recommended constructor in tab editing, as it can be initialized with consistent size
      */
     public Chord(int size) {
         this.size = size;
@@ -26,6 +28,7 @@ public class Chord {
     /**
      * @REQUIRES: frets.length > 0, elements of frets must be valid fret
      * @EFFECTS: constructor for a Chord given list of int representing frets
+     * NOT recommended for tab editing, possible future use, mainly for debugging
      */
     public Chord(int[] frets) {
         this.size = frets.length;
@@ -47,12 +50,12 @@ public class Chord {
     }
 
     /**
-     * @REQUIRES: string < size and fret must be valid fret (>=0 or Note constant)
-     * @EFFECTS: modifies the note at given string to fret (zero-based index)
+     * @REQUIRES: pos < size and fret must be valid fret (>=0 or Note constant)
+     * @EFFECTS: modifies the note at given pos to fret (zero-based index)
      * @MODIFIES: this
      */
-    public void editNote(int string, int fret) {
-        notes[string].edit(fret);
+    public void editNote(int pos, int fret) {
+        notes[pos].edit(fret);
     }
 
     /**
@@ -71,8 +74,8 @@ public class Chord {
         }
     }
 
-    public int getFret(int string) {
-        return notes[string].getFret();
+    public int getFret(int pos) {
+        return notes[pos].getFret();
     }
 
     public int[] getFrets() {
@@ -83,8 +86,8 @@ public class Chord {
         return frets;
     }
 
-    public Note getNote(int string) {
-        return notes[string].cloneNote();
+    public Note getNote(int pos) {
+        return notes[pos].cloneNote();
     }
 
     public Note[] getNotes() {

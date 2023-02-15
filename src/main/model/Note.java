@@ -6,40 +6,42 @@ package model;
  */
 public class Note {
 
+    // int representation of other guitar notations
     public static final int EMPTY = -1;
     public static final int MUTE = -2;
 
+    // string representation of other guitar notations
     public static final String EMPTY_STRING = "-";
     public static final String MUTE_STRING = "x";
 
     private int fret;
 
     /**
-     * @REQUIRES: fret >= 0
-     * @EFFECTS: constructor for Note given fret number, sets type to fret
+     * @REQUIRES: fret >= 0 or one of constants representing other guitar notations
+     * @EFFECTS: constructor for Note given fret
      */
     public Note(int fret) {
         this.fret = fret;
     }
 
     /**
-     * @REQUIRES: fret >= 0
+     * @REQUIRES: fret >= 0 or one of constants
+     * @EFFECTS: changes fret to provided fret
      * @MODIFIES: this
-     * @EFFECTS: changes the type to FRET, and changes the fret number
      */
     public void edit(int fret) {
         this.fret = fret;
     }
 
     /**
-     * @EFFECTS: returns string representation of note, returns empty representation if invalid fret
+     * @EFFECTS: returns string representation of note, returns empty representation if somehow invalid fret
      */
     public String toString() {
         switch (fret) {
             case EMPTY:
-                return "-";
+                return EMPTY_STRING;
             case MUTE:
-                return "x";
+                return MUTE_STRING;
             default:
                 return fret >= 0 ? Integer.toString(fret) : EMPTY_STRING;
         }
@@ -50,7 +52,7 @@ public class Note {
     }
 
     /**
-     * @EFFECTS: clones Note, does not implement Cloneable
+     * @EFFECTS: clones Note without implementing Cloneable
      */
     public Note cloneNote() {
         return new Note(fret);

@@ -12,12 +12,12 @@ public class Tab {
 
     public static final String[] STANDARD_TUNING = {"E", "B", "G", "D", "A", "E"};
 
-    // the following constants can be changed
-    // the amount of EMPTY_SPACE to be placed in between chords
+    // the amount of CHORD_SPACER to be placed in between chords
     public static final int CHORD_SPACING = 3;
     // the string to be used to space out chords
     public static final String CHORD_SPACER = Note.EMPTY_STRING;
-    // the number of guitar strings of tab
+
+    // the number of guitar strings of Tab
     public final int size;
     // private so that it can't be modified outside
     private final ArrayList<Chord> chords;
@@ -55,7 +55,8 @@ public class Tab {
     public String toString(boolean chordPos) {
         String[] output = new String[size + (chordPos ? 1 : 0)];
 
-        // 1 is for more aesthetic spacing
+        // finding the longest string in tuning
+        // 1 is the space between vertical line and tuning notes
         int tuningMaxLength = 1 + Arrays.stream(tuning)
                 .map(String::length).reduce((a, b) -> a > b ? a : b).orElse(1);
 
@@ -65,13 +66,14 @@ public class Tab {
         }
 
         if (chordPos) {
-            // 1 represents the space for the |
+            // 1 accounts for the | in aligning pos num with respective chords
             output[size] = repeat(tuningMaxLength + 1 + CHORD_SPACING, " ");
         }
 
         for (int i = 0; i < chords.size(); i++) {
             Chord c = chords.get(i);
             // getting the longest note's string in chord
+            // in case of error, default to 1 (shouldn't happen)
             int noteMaxLength = Arrays.stream(c.getNotes())
                     .map(a -> a.toString().length()).reduce((a, b) -> a > b ? a : b).orElse(1);
 
@@ -89,11 +91,18 @@ public class Tab {
     }
 
     /**
-     * @EFFECTS: returns String s repeated n times
+     * @EFFECTS: returns String s repeated n times, helper function for toString
      */
     private String repeat(int n, String s) {
         return String.join("", Collections.nCopies(n, s));
     }
+
+    /*
+    the following overloading methods involving Chord as param are not recommended in tab editing
+    runtime errors will not occur, but when handled improperly (ie. chord.size < this.size),
+    unexpected behaviours may occur when attempting to edit chord.
+    may be fixed if Chord.notes is changed to ArrayList
+     */
 
     /**
      * @EFFECTS: adds a new Chord to the end of the tab's list of Chords and returns it
@@ -106,6 +115,7 @@ public class Tab {
     }
 
     /**
+     * @REQUIRES: chord.size == this.size
      * @EFFECTS: adds given Chord to end of tab's list of Chord
      * @MODIFIES: this
      */
@@ -160,10 +170,6 @@ public class Tab {
         return chords.remove(pos);
     }
 
-    public String[] getTuning() {
-        return tuning.clone();
-    }
-
     /**
      * @REQUIRES: pos >= 0, this.chords.size > 0
      * @EFFECTS: returns the Chord at given position without reference
@@ -172,16 +178,18 @@ public class Tab {
         return chords.get(pos).cloneChord();
     }
 
-    public ArrayList<Chord> getChords() {
-        return new ArrayList<>(this.chords);
-    }
-
     /**
-     *
      * @EFFECTS: returns the number of chords in tabs
      */
     public int getLength() {
         return chords.size();
     }
 
+    public String[] getTuning() {
+        return tuning.clone();
+    }
+
+    public ArrayList<Chord> getChords() {
+        return new ArrayList<>(this.chords);
+    }
 }
