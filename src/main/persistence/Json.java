@@ -38,7 +38,7 @@ public class Json {
         ArrayList<String> tuning = new ArrayList<>();
         jsonTab.getJSONArray("tuning").forEach(o -> tuning.add(o.toString()));
 
-        Tab tab = new Tab(name, tuning.toArray(new String[tuning.size()]));
+        Tab tab = new Tab(name, tuning.toArray(new String[0]));
 
         ArrayList<Chord> chords = new ArrayList<>();
 
