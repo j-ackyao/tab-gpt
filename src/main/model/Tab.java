@@ -21,14 +21,16 @@ public class Tab {
     public final int size;
     // private so that it can't be modified outside
     private final ArrayList<Chord> chords;
+    private final String name;
     private final String[] tuning;
 
     /**
      * @EFFECTS: constructs tab by instantiating a new arraylist of chord with standard tuning
      */
-    public Tab() {
+    public Tab(String name) {
         this.chords = new ArrayList<>();
         this.size = STANDARD_TUNING.length;
+        this.name = name;
         this.tuning = STANDARD_TUNING;
     }
 
@@ -36,9 +38,10 @@ public class Tab {
      * @REQUIRES: tuning.length > 0
      * @EFFECTS: constructs tab by instantiating a new arraylist of segments
      */
-    public Tab(String[] tuning) {
+    public Tab(String name, String[] tuning) {
         this.chords = new ArrayList<>();
         this.size = tuning.length;
+        this.name = name;
         this.tuning = tuning;
     }
 
@@ -183,6 +186,10 @@ public class Tab {
      */
     public int getLength() {
         return chords.size();
+    }
+
+    public String getName() {
+        return this.name;
     }
 
     public String[] getTuning() {

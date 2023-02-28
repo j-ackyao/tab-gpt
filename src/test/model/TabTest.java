@@ -16,7 +16,7 @@ class TabTest {
 
     @BeforeEach
     void testInit() {
-        tab = new Tab();
+        tab = new Tab("test");
         chord = new Chord(new int[]{3, 12, 0, 0, 2, 3});
         altChord = new Chord(new int[]{0, 1, 2, 2, 0, Note.EMPTY});
 
@@ -26,8 +26,9 @@ class TabTest {
 
     @Test
     void testConstructorStandard() {
-        Tab tab = new Tab();
+        Tab tab = new Tab("test");
         assertEquals(6, tab.size);
+        assertEquals("test", tab.getName());
         assertArrayEquals(Tab.STANDARD_TUNING, tab.getTuning());
         assertEquals(new ArrayList<Chord>(), tab.getChords());
     }
@@ -35,8 +36,9 @@ class TabTest {
     @Test
     void testConstructorTuning() {
         String[] altTuning = new String[]{"C", "D", "A", "G"};
-        Tab tab = new Tab(altTuning);
+        Tab tab = new Tab("test2", altTuning);
         assertEquals(altTuning.length, tab.size);
+        assertEquals("test2", tab.getName());
         assertArrayEquals(altTuning, tab.getTuning());
         assertEquals(new ArrayList<Chord>(), tab.getChords());
     }
@@ -45,7 +47,8 @@ class TabTest {
     void testToString() {
         // testing with Tab.CHORD_SPACING = 3
         // and Tab.CHORD_SPACER = Note.EMPTY_STRING
-        Tab tab = new Tab(new String[]{"E", "F", "G", "Cb", "Ab", "D"});
+        // also tests custom tuning
+        Tab tab = new Tab("toString", new String[]{"E", "F", "G", "Cb", "Ab", "D"});
         tab.addChord(chord);
         tab.addChord(chord);
         String expected =
@@ -82,7 +85,7 @@ class TabTest {
     void testToStringSmallerChord() {
         // testing with Tab.CHORD_SPACING = 3
         // and Tab.CHORD_SPACER = Note.EMPTY_STRING
-        Tab tab = new Tab(new String[]{"E", "F", "G", "Cb", "Ab", "D", "B", "A"});
+        Tab tab = new Tab("smaller", new String[]{"E", "F", "G", "Cb", "Ab", "D", "B", "A"});
         tab.addChord(chord);
         tab.addChord(chord);
         String expected = "E  |---3----3----\n" +
@@ -100,7 +103,7 @@ class TabTest {
     void testToStringLargerChord() {
         // testing with Tab.CHORD_SPACING = 3
         // and Tab.CHORD_SPACER = Note.EMPTY_STRING
-        Tab tab = new Tab(new String[]{"E", "F", "G"});
+        Tab tab = new Tab("larger", new String[]{"E", "F", "G"});
         tab.addChord(chord);
         tab.addChord(chord);
         String expected = "E |---3----3----\n" +

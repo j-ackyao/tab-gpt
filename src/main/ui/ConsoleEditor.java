@@ -24,21 +24,41 @@ public class ConsoleEditor {
     }
 
     /**
-     * @EFFECTS: helper for constructor to handle user input and generate new Tab
+     * @EFFECTS: helper for constructor to handle user input and generate new Tab or open existing tab
      * @MODIFIES: this
      */
+    // Suppressed, this handles user inputs and sets up tab
+    @SuppressWarnings("methodlength")
     private void init() {
+        print("Specify tab to load or enter for new tab");
+
+        while (true) {
+            String inputTab = input.nextLine();
+            if ("".equals(inputTab)) {
+                break;
+            } else {
+                // read input
+            }
+            print("not found or something");
+        }
+
+        print("Give name to new tab");
+        String name = input.nextLine();
+        if ("".equals(name)) {
+            name = "tab";
+        }
+
         print("Input the tuning of the strings of tab in the form X-X-X-..., or enter to use standard tuning");
         // may include capitalized characters
         String tuning = input.nextLine();
         if ("".equals(tuning)) {
             print("Using standard tuning");
-            tab = new Tab();
+            tab = new Tab(name);
         } else if (tuning.split("-").length == 0) {
             print("Invalid tuning, using standard tuning");
-            tab = new Tab();
+            tab = new Tab(name);
         } else {
-            tab = new Tab(tuning.split("-"));
+            tab = new Tab(name, tuning.split("-"));
         }
         print(tab);
     }
@@ -48,7 +68,7 @@ public class ConsoleEditor {
      * @EFFECTS: handles all user inputs
      * @MODIFIES: this
      */
-    // Suppressed as this handles all possible commands
+    // Suppressed, this handles all possible commands
     @SuppressWarnings("methodlength")
     void run() {
         boolean exit = false;
