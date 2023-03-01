@@ -27,14 +27,10 @@ public class Json {
     /**
      * @EFFECTS: generates tab given tab name (without extension) and loads all json data
      */
-    public static Tab load(String name) {
+    public static Tab load(String name) throws IOException {
         JSONObject jsonTab;
-        try {
-            jsonTab = new JSONObject(read(name));
-        } catch (IOException io) {
-            System.out.println("Tab not found");
-            return null;
-        }
+        jsonTab = new JSONObject(read(name));
+
         ArrayList<String> tuning = new ArrayList<>();
         jsonTab.getJSONArray("tuning").forEach(o -> tuning.add(o.toString()));
 
@@ -68,21 +64,16 @@ public class Json {
     /**
      * @EFFECTS: saves given tab and returns whether it has been successfully saved
      */
-    public static boolean save(Tab tab) {
+    public static void save(Tab tab) throws FileNotFoundException {
         String name = tab.getName();
         String[] tuning = tab.getTuning();
         ArrayList<Chord> chords = tab.getChords();
 
         PrintWriter writer;
-        try {
-            writer = new PrintWriter(PATH + name + EXTN);
-        } catch (FileNotFoundException fnf) {
-            System.out.println("File not found when saving");
-            return false;
-        }
+        writer = new PrintWriter(PATH + name + EXTN);
 
+        // name is not stored in file, as the name of the tab is whatever the file name is
         JSONObject json = new JSONObject();
-        json.put("name", name);
         json.put("tuning", toJArray(tuning));
         ArrayList<int[]> chordsAsFrets = new ArrayList<>();
         chords.forEach(c -> chordsAsFrets.add(c.getFrets()));
@@ -90,8 +81,6 @@ public class Json {
 
         writer.print(json);
         writer.close();
-
-        return true;
     }
 
     /**

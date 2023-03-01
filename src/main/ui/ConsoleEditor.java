@@ -2,7 +2,10 @@ package ui;
 
 import model.Note;
 import model.Tab;
+import persistence.Json;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Scanner;
 
@@ -20,6 +23,7 @@ public class ConsoleEditor {
     public ConsoleEditor() {
         this.input = new Scanner(System.in);
         init();
+        print(tab);
         run();
     }
 
@@ -30,21 +34,34 @@ public class ConsoleEditor {
     // Suppressed, this handles user inputs and sets up tab
     @SuppressWarnings("methodlength")
     private void init() {
-        print("Specify tab to load or enter for new tab");
 
+        print("Specify tab to load or enter for new tab");
         while (true) {
-            String inputTab = input.nextLine();
-            if ("".equals(inputTab)) {
-                break;
+            String tabName = input.nextLine();
+            if ("".equals(tabName)) {
+                newTab();
+                return;
             } else {
-                // read input
+                try {
+                    this.tab = Json.load(tabName);
+                    return;
+                } catch (IOException io) {
+                    print("Tab not found");
+                }
             }
-            print("not found or something");
         }
 
+    }
+
+    /**
+     * @EFFECTS: generates a new tab based on user input/specification
+     * @MODIFIES: this
+     */
+    void newTab() {
         print("Give name to new tab");
         String name = input.nextLine();
         if ("".equals(name)) {
+            print("No name given, default to 'tab'®");
             name = "tab";
         }
 
@@ -60,9 +77,7 @@ public class ConsoleEditor {
         } else {
             tab = new Tab(name, tuning.split("-"));
         }
-        print(tab);
     }
-
 
     /**
      * @EFFECTS: handles all user inputs
@@ -106,8 +121,11 @@ public class ConsoleEditor {
                     case "h":
                         help(args);
                         break;
+                    case "save":
+                    case "s":
+                        save();
                     case "":
-                        print(tab);
+                        print(tab.toString(true));
                         break;
                     default:
                         print("Command not found");
@@ -191,6 +209,18 @@ public class ConsoleEditor {
     }
 
     /**
+     * @EFFECTS: saves tab
+     */
+    void save() {
+        try {
+            Json.save(tab);
+            print("Save successful");
+        } catch (FileNotFoundException fnf) {
+            print("Unable to save to tab's name");
+        }
+    }
+
+    /**
      * @EFFECTS: prints general help instructions or for specified commands
      */
     // Suppressed as this method is just a list of commands for help
@@ -199,28 +229,32 @@ public class ConsoleEditor {
         if (args.length == 0) {
             print("Form for fret input: X-X-X-... 'e' or '' (nothing) for empty, 'x' for mute");
             print("For more additional info about command: help <command>");
-            print("Available commands: (a)dd, (i)nsert, (e)dit, (d)elete, (c)opy(p)aste");
+            print("Available commands: (a)dd, (i)nsert, (e)dit, (d)elete, (c)opy(p)aste, (s)ave");
         } else {
             switch (args[0]) {
-                case "a":
                 case "add":
+                case "a":
                     print("Adds chord to end of tab: add [frets]");
                     break;
-                case "i":
                 case "insert":
+                case "i":
                     print("Inserts chord at given position: insert <position> [frets]");
                     break;
-                case "e":
                 case "edit":
+                case "e":
                     print("Edits chord at given position: edit <position> <frets>");
                     break;
-                case "d":
                 case "delete":
+                case "d":
                     print("Deletes chord at end or given position: delete [position]");
                     break;
-                case "cp":
                 case "copypaste":
+                case "cp":
                     print("Copies and pastes chord at given positions: copypaste <position1> <position2>");
+                    break;
+                case "save":
+                case "s":
+                    print("Saves tab to file as tab's name");
                     break;
                 default:
                     print("Command not found");

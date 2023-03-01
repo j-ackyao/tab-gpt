@@ -80,6 +80,7 @@ public class Tab {
             int noteMaxLength = Arrays.stream(c.getNotes())
                     .map(a -> a.toString().length()).reduce((a, b) -> a > b ? a : b).orElse(1);
 
+            // accounts for chords of different sizes
             for (int j = 0; j < size; j++) {
                 output[j] += (j < c.size ? c.getNote(j) : Note.EMPTY_STRING) + repeat(CHORD_SPACING + noteMaxLength
                         - (j < c.size ? c.getNote(j).toString().length() : 1), CHORD_SPACER);
