@@ -19,7 +19,7 @@ import java.util.stream.Stream;
  * Class that has static methods for reading and writing save files
  * Avoids creating objects with static methods
  */
-public class Json {
+public final class Json {
 
     private static final String PATH = "./data/";
     private static final String EXTN = ".tab";

@@ -23,6 +23,7 @@ public class JsonTest {
         tuning = new String[]{"A", "Bb", "C", "D", "F", "Test Tune"};
         chord = new Chord(new int[]{3, 0, 0, 0, 2, 3});
         altChord = new Chord(new int[]{Note.MUTE, 1, 2, 2, 0, Note.EMPTY});
+
     }
 
 
