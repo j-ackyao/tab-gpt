@@ -13,6 +13,7 @@ public class Tab {
     public static final String[] STANDARD_TUNING = {"E", "B", "G", "D", "A", "E"};
 
     // the amount of CHORD_SPACER to be placed in between chords
+    // should be greater than 1
     public static final int CHORD_SPACING = 3;
     // the string to be used to space out chords
     public static final String CHORD_SPACER = Note.EMPTY_STRING;

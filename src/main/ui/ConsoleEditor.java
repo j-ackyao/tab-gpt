@@ -61,7 +61,7 @@ public class ConsoleEditor {
         print("Give name to new tab");
         String name = input.nextLine();
         if ("".equals(name)) {
-            print("No name given, default to 'tab'®");
+            print("No name given, default to 'tab'");
             name = "tab";
         }
 
