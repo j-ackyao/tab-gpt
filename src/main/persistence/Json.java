@@ -24,6 +24,11 @@ public class Json {
     private static final String PATH = "./data/";
     private static final String EXTN = ".tab";
 
+    // privatizes constructor, Json won't be instantiated as an object
+    private Json() {
+
+    }
+
     /**
      * @EFFECTS: generates tab given tab name (without extension) and loads all json data
      */
