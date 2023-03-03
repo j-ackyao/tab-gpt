@@ -46,7 +46,7 @@ public class ConsoleEditor {
                     this.tab = Json.load(tabName);
                     return;
                 } catch (IOException io) {
-                    print("Tab not found");
+                    print("Tab not found try again");
                 }
             }
         }
@@ -230,36 +230,37 @@ public class ConsoleEditor {
             print("Form for fret input: X-X-X-... 'e' or '' (nothing) for empty, 'x' for mute");
             print("For more additional info about command: help <command>");
             print("Available commands: (a)dd, (i)nsert, (e)dit, (d)elete, (c)opy(p)aste, (s)ave");
-        } else {
-            switch (args[0]) {
-                case "add":
-                case "a":
-                    print("Adds chord to end of tab: add [frets]");
-                    break;
-                case "insert":
-                case "i":
-                    print("Inserts chord at given position: insert <position> [frets]");
-                    break;
-                case "edit":
-                case "e":
-                    print("Edits chord at given position: edit <position> <frets>");
-                    break;
-                case "delete":
-                case "d":
-                    print("Deletes chord at end or given position: delete [position]");
-                    break;
-                case "copypaste":
-                case "cp":
-                    print("Copies and pastes chord at given positions: copypaste <position1> <position2>");
-                    break;
-                case "save":
-                case "s":
-                    print("Saves tab to file as tab's name");
-                    break;
-                default:
-                    print("Command not found");
-            }
+            return;
         }
+        switch (args[0]) {
+            case "add":
+            case "a":
+                print("Adds chord to end of tab: add [frets]");
+                break;
+            case "insert":
+            case "i":
+                print("Inserts chord at given position: insert <position> [frets]");
+                break;
+            case "edit":
+            case "e":
+                print("Edits chord at given position: edit <position> <frets>");
+                break;
+            case "delete":
+            case "d":
+                print("Deletes chord at end or given position: delete [position]");
+                break;
+            case "copypaste":
+            case "cp":
+                print("Copies and pastes chord at given positions: copypaste <position1> <position2>");
+                break;
+            case "save":
+            case "s":
+                print("Saves tab to file as tab's name");
+                break;
+            default:
+                print("Command not found");
+        }
+
     }
 
     /**
