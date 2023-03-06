@@ -21,7 +21,9 @@ import java.util.stream.Stream;
  */
 public final class Json {
 
+    // location of where data is saved to
     private static final String PATH = "./data/";
+    // extension of file type
     private static final String EXTN = ".tab";
 
     // privatizes constructor, Json won't be instantiated as an object
