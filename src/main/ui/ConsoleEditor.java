@@ -35,19 +35,18 @@ public class ConsoleEditor {
     @SuppressWarnings("methodlength")
     private void init() {
 
-        print("Specify tab to load or enter for new tab");
+        print("Specify name of tab to load or enter for new tab");
         while (true) {
             String tabName = input.nextLine();
             if ("".equals(tabName)) {
                 newTab();
                 return;
-            } else {
-                try {
-                    this.tab = Json.load(tabName);
-                    return;
-                } catch (IOException io) {
-                    print("Tab not found try again");
-                }
+            }
+            try {
+                this.tab = Json.load(tabName);
+                return;
+            } catch (IOException io) {
+                print("Tab not found try again");
             }
         }
 
@@ -209,7 +208,7 @@ public class ConsoleEditor {
     }
 
     /**
-     * @EFFECTS: saves tab
+     * @EFFECTS: saves tab using static method from Json
      */
     void save() {
         try {
@@ -293,6 +292,9 @@ public class ConsoleEditor {
             print("Given position invalid/out of bounds, action failed");
         } else if (e instanceof NumberFormatException) {
             print("Given string/invalid number when expected integer, action failed");
+        } else {
+            e.printStackTrace();
+            print("Unexpected exception encountered");
         }
     }
 

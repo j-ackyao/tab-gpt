@@ -49,6 +49,7 @@ public class Tab {
     /**
      * @EFFECTS: returns the Tab as string without chord number pos (default toString)
      */
+    @Override
     public String toString() {
         return toString(false);
     }
