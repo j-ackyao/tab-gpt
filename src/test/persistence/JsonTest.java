@@ -31,11 +31,11 @@ public class JsonTest {
     void testLoadTestTab() {
         Tab load = null;
         try {
-            load = Json.load("loadTest");
+            load = Json.load("testTabs/loadTest");
         } catch (IOException io) {
             fail("loadTest.tab not found or unable to load");
         }
-        assertEquals("loadTest", load.getName());
+        assertEquals("testTabs/loadTest", load.getName());
         assertEquals(6, load.size);
         assertEquals(2, load.getLength());
         assertArrayEquals(tuning, load.getTuning());
@@ -45,7 +45,7 @@ public class JsonTest {
 
     @Test
     void testSaveTab() {
-        tab = new Tab("saveTest", tuning);
+        tab = new Tab("testTabs/saveTest", tuning);
         tab.addChord(chord);
         tab.addChord(altChord);
         tab.addChord(chord);
@@ -53,14 +53,14 @@ public class JsonTest {
         Tab load = null;
         try {
             Json.save(tab);
-            load = Json.load("saveTest");
+            load = Json.load("testTabs/saveTest");
         } catch (FileNotFoundException fnf) {
             fail("File not found exception");
         } catch (IOException io) {
             fail("Unable to find saveTest");
         }
 
-        assertEquals("saveTest", load.getName());
+        assertEquals("testTabs/saveTest", load.getName());
         assertEquals(6, load.size);
         assertEquals(3, load.getLength());
         assertArrayEquals(tuning, load.getTuning());
