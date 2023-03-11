@@ -14,7 +14,7 @@ import java.util.Scanner;
  */
 public class ConsoleEditor {
 
-    Scanner input;
+    private final Scanner input;
     private Tab tab;
 
     /**
@@ -106,6 +106,10 @@ public class ConsoleEditor {
                     case "e":
                         consoleEditChord(args);
                         break;
+                    case "bend":
+                    case "b":
+                        consoleBendChord(args);
+                        break;
                     case "delete":
                     case "d":
                         consoleDeleteChord(args);
@@ -180,6 +184,19 @@ public class ConsoleEditor {
     }
 
     /**
+     * @EFFECTS: bends chord to given args
+     * @MODIFIES: this
+     */
+    void consoleBendChord(String[] args) {
+        if (args.length < 2) {
+            print("Please provide the position of the chord and type of bend (none, half, full)");
+        } else {
+            tab.bendChord(Integer.parseInt(args[0]), Note.Bend.getBend(args[1]));
+            print(tab.toString(true));
+        }
+    }
+
+    /**
      * @EFFECTS: deletes chord at end of tab or at specified position (first arg)
      * @MODIFIES: this
      */
@@ -226,7 +243,7 @@ public class ConsoleEditor {
         if (args.length == 0) {
             print("Form for fret input: X-X-X-... 'e' or '' (nothing) for empty, 'x' for mute");
             print("For more additional info about command: help <command>");
-            print("Available commands: (a)dd, (i)nsert, (e)dit, (d)elete, (c)opy(p)aste, (s)ave");
+            print("Available commands: (a)dd, (i)nsert, (e)dit, (b)end, (d)elete, (c)opy(p)aste, (s)ave, exit");
             return;
         }
         switch (args[0]) {
@@ -242,6 +259,10 @@ public class ConsoleEditor {
             case "e":
                 print("Edits chord at given position: edit <position> <frets>");
                 break;
+            case "bend":
+            case "b":
+                print("Bends chord at given position: bend <position> <none|half|full>");
+                break;
             case "delete":
             case "d":
                 print("Deletes chord at end or given position: delete [position]");
@@ -253,6 +274,9 @@ public class ConsoleEditor {
             case "save":
             case "s":
                 print("Saves tab to file as tab's name");
+                break;
+            case "exit":
+                print("Exits program WITHOUT saving");
                 break;
             default:
                 print("Command not found");
@@ -282,6 +306,8 @@ public class ConsoleEditor {
         return frets;
     }
 
+    // should reformat and handle exceptions respectively
+
     /**
      * @EFFECTS: handles exceptions arisen from user input with general behaviour
      */
@@ -290,6 +316,8 @@ public class ConsoleEditor {
             print("Given position invalid/out of bounds, action failed");
         } else if (e instanceof NumberFormatException) {
             print("Given string/invalid number when expected integer, action failed");
+        } else if (e instanceof IllegalArgumentException) {
+            print("Given invalid argument");
         } else {
             e.printStackTrace();
             print("Unexpected exception encountered");

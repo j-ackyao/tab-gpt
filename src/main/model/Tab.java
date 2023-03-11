@@ -87,7 +87,6 @@ public class Tab {
                 output[j] += (j < c.size ? c.getNote(j) : Note.EMPTY_STRING) + repeat(CHORD_SPACING + noteMaxLength
                         - (j < c.size ? c.getNote(j).toString().length() : 1), CHORD_SPACER);
             }
-
             if (chordPos) {
                 output[size] += i + repeat(CHORD_SPACING + noteMaxLength - Integer.toString(i).length(), " ");
             }
@@ -165,6 +164,13 @@ public class Tab {
      */
     public void editChord(int pos, Chord chord) {
         chords.set(pos, chord.cloneChord());
+    }
+
+    /**
+     * @REQUIRES: pos >= 0
+     */
+    public void bendChord(int pos, Note.Bend bend) {
+        chords.get(pos).bendNotes(bend);
     }
 
     /**

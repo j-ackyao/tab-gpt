@@ -74,6 +74,12 @@ public class Chord {
         }
     }
 
+    public void bendNotes(Note.Bend bend) {
+        for (Note note : notes) {
+            note.bend(bend);
+        }
+    }
+
     public int getFret(int pos) {
         return notes[pos].getFret();
     }

@@ -58,4 +58,13 @@ public class NoteTest {
         assertEquals(12, original.getFret());
         assertEquals(Note.MUTE, clone.getFret());
     }
+
+    // todo
+    @Test
+    void testBend() {
+        Note original = new Note(12);
+        System.out.println(Note.Bend.getBend("full"));
+        original.bend(Note.Bend.getBend("full"));
+        System.out.println(original);
+    }
 }
