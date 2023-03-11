@@ -104,8 +104,9 @@ public class Tab {
 
     /*
     the following overloading methods involving Chord as param are not recommended in tab editing
-    runtime errors will not occur, but when handled improperly (ie. chord.size < this.size),
+    as runtime errors will not occur, but when handled improperly (ie. chord.size < this.size),
     unexpected behaviours may occur when attempting to edit chord.
+    the methods are used mainly for testing
     may be fixed if Chord.notes is changed to ArrayList
      */
 
@@ -168,9 +169,29 @@ public class Tab {
 
     /**
      * @REQUIRES: pos >= 0
+     * @EFFECTS: adds bending to the Chord at given position with given Bend
+     * @MODIFIES: this
      */
     public void bendChord(int pos, Note.Bend bend) {
         chords.get(pos).bendNotes(bend);
+    }
+
+    /**
+     * @REQUIRES: pos >= 0
+     * @EFFECTS: adds slideTo to the Chord at given position with given slide
+     * @MODIFIES: this
+     */
+    public void slideToChord(int pos, Note.Slide slide) {
+        chords.get(pos).slideToNotes(slide);
+    }
+
+    /**
+     * @REQUIRES: pos >= 0
+     * @EFFECTS: adds slideFrom to the Chord at given position with given slide
+     * @MODIFIES: this
+     */
+    public void slideFromChord(int pos, Note.Slide slide) {
+        chords.get(pos).slideFromNotes(slide);
     }
 
     /**

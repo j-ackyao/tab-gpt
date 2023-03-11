@@ -161,6 +161,24 @@ class TabTest {
     }
 
     @Test
+    void testBendChord() {
+        tab.bendChord(0, Note.Bend.FULL);
+        for (Note note : tab.getChord(0).getNotes()) {
+            assertEquals(note.getBend(), Note.Bend.FULL);
+        }
+    }
+
+    @Test
+    void testSlideChord() {
+        tab.slideToChord(0, Note.Slide.UP);
+        tab.slideFromChord(0, Note.Slide.DOWN);
+        for (Note note : tab.getChord(0).getNotes()) {
+            assertEquals(note.getSlideTo(), Note.Slide.UP);
+            assertEquals(note.getSlideFrom(), Note.Slide.DOWN);
+        }
+    }
+
+    @Test
     void testRemoveChord() {
         tab.insertChord(1, altChord);
         Chord removed = tab.removeChord(0);

@@ -110,6 +110,10 @@ public class ConsoleEditor {
                     case "b":
                         consoleBendChord(args);
                         break;
+                    case "slide":
+                    case "s":
+                        consoleSlideChord(args);
+                        break;
                     case "delete":
                     case "d":
                         consoleDeleteChord(args);
@@ -123,7 +127,6 @@ public class ConsoleEditor {
                         help(args);
                         break;
                     case "save":
-                    case "s":
                         save();
                     case "":
                         print(tab.toString(true));
@@ -189,10 +192,28 @@ public class ConsoleEditor {
      */
     void consoleBendChord(String[] args) {
         if (args.length < 2) {
-            print("Please provide the position of the chord and type of bend (none, half, full)");
+            print("Please provide the position of the chord and type of bend (none|half|full)");
         } else {
             tab.bendChord(Integer.parseInt(args[0]), Note.Bend.getBend(args[1]));
             print(tab.toString(true));
+        }
+    }
+
+    /**
+     * @EFFECTS: bends chord to given args
+     * @MODIFIES: this
+     */
+    void consoleSlideChord(String[] args) {
+        if (args.length < 3) {
+            print("Please provide the position of the chord, type of slide (none|up|down) and direction (to|from)");
+        } else if (args[2].equals("to")) {
+            tab.slideToChord(Integer.parseInt(args[0]), Note.Slide.getSlide(args[1]));
+            print(tab.toString(true));
+        } else if (args[2].equals("from")) {
+            tab.slideFromChord(Integer.parseInt(args[0]), Note.Slide.getSlide(args[1]));
+            print(tab.toString(true));
+        } else {
+            print("Please provide valid direction of slide");
         }
     }
 
@@ -243,7 +264,8 @@ public class ConsoleEditor {
         if (args.length == 0) {
             print("Form for fret input: X-X-X-... 'e' or '' (nothing) for empty, 'x' for mute");
             print("For more additional info about command: help <command>");
-            print("Available commands: (a)dd, (i)nsert, (e)dit, (b)end, (d)elete, (c)opy(p)aste, (s)ave, exit");
+            print("Available commands: (a)dd, (i)nsert, (e)dit, (b)end, "
+                    + "(s)lide, (d)elete, (c)opy(p)aste, (s)ave, exit");
             return;
         }
         switch (args[0]) {
@@ -261,7 +283,12 @@ public class ConsoleEditor {
                 break;
             case "bend":
             case "b":
-                print("Bends chord at given position: bend <position> <none|half|full>");
+                print("Adds bend to chord at given position: bend <position> <none|half|full>");
+                break;
+            case "slide":
+            case "s":
+                print("Adds up or down slides to or from chord at given position:"
+                        + " slide <position> <up|down> <to|from>");
                 break;
             case "delete":
             case "d":
@@ -272,7 +299,6 @@ public class ConsoleEditor {
                 print("Copies and pastes chord at given positions: copypaste <position1> <position2>");
                 break;
             case "save":
-            case "s":
                 print("Saves tab to file as tab's name");
                 break;
             case "exit":

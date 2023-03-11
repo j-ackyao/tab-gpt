@@ -6,14 +6,19 @@ package model;
  */
 public class Note {
 
+    // represents bending
     public enum Bend {
-        NONE(""), HALF(HALF_BEND), FULL(FULL_BEND);
+        // constants
+        NONE(""), HALF(HALF_BEND_STRING), FULL(FULL_BEND_STRING);
 
+        // string representation of bends
         private final String stringRep;
+        // private constructor of enum
         Bend(String string) {
             this.stringRep = string;
         }
 
+        // for ui, get bend given name of bend
         public static Bend getBend(String string) {
             return Bend.valueOf(string.toUpperCase());
         }
@@ -24,20 +29,21 @@ public class Note {
         }
     }
 
+    // represents slides
     public enum Slide {
-        NONE(""), DOWN(SLIDE_DOWN), UP(SLIDE_UP);
+        // constants
+        NONE(""), DOWN(SLIDE_DOWN_STRING), UP(SLIDE_UP_STRING);
 
-        private String stringRep;
+        // string representation of slides
+        private final String stringRep;
+        // private constructor of enum
         Slide(String string) {
             this.stringRep = string;
         }
 
+        // for ui, gets slide given name of slide
         public static Slide getSlide(String string) {
-            try {
-                return Slide.valueOf(string.toUpperCase());
-            } catch (IllegalArgumentException e) {
-                return null;
-            }
+            return Slide.valueOf(string.toUpperCase());
         }
 
         @Override
@@ -55,14 +61,13 @@ public class Note {
     public static final String MUTE_STRING = "x";
 
     // below are constants for bends and slides
-    public static final String NONE = "";
     // string constants of bends
-    public static final String FULL_BEND = "┘";
-    public static final String HALF_BEND = "┘½";
+    public static final String FULL_BEND_STRING = "┘";
+    public static final String HALF_BEND_STRING = "┘½";
 
     // string constants of slides
-    public static final String SLIDE_DOWN = "\\";
-    public static final String SLIDE_UP = "/";
+    public static final String SLIDE_DOWN_STRING = "\\";
+    public static final String SLIDE_UP_STRING = "/";
 
 
     private int fret;
@@ -125,12 +130,24 @@ public class Note {
             case MUTE:
                 return MUTE_STRING;
             default:
-                return fret >= 0 ? slideFrom + Integer.toString(fret) + bend + slideTo : EMPTY_STRING;
+                return fret >= 0 ? slideTo + Integer.toString(fret) + bend + slideFrom : EMPTY_STRING;
         }
     }
 
     public int getFret() {
         return fret;
+    }
+
+    public Bend getBend() {
+        return this.bend;
+    }
+
+    public Slide getSlideTo() {
+        return this.slideTo;
+    }
+
+    public Slide getSlideFrom() {
+        return this.slideFrom;
     }
 
     /**

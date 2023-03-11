@@ -74,9 +74,33 @@ public class Chord {
         }
     }
 
+    /**
+     * @EFFECTS: adds bending to notes with given bend
+     * @MODIFIES: this
+     */
     public void bendNotes(Note.Bend bend) {
         for (Note note : notes) {
             note.bend(bend);
+        }
+    }
+
+    /**
+     * @EFFECTS: adds slide to the notes' slideTo given slide
+     * @MODIFIES: this
+     */
+    public void slideToNotes(Note.Slide slide) {
+        for (Note note : notes) {
+            note.slideTo(slide);
+        }
+    }
+
+    /**
+     * @EFFECTS: adds slide to the notes' slideFrom given slide
+     * @MODIFIES: this
+     */
+    public void slideFromNotes(Note.Slide slide) {
+        for (Note note : notes) {
+            note.slideFrom(slide);
         }
     }
 

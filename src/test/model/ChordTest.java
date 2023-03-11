@@ -76,5 +76,21 @@ public class ChordTest {
         assertEquals(4, clone.getNote(2).getFret());
     }
 
+    @Test
+    void testBend() {
+        chord.bendNotes(Note.Bend.FULL);
+        for (Note note : chord.getNotes()) {
+            assertEquals(note.getBend(), Note.Bend.FULL);
+        }
+    }
 
+    @Test
+    void testSlide() {
+        chord.slideToNotes(Note.Slide.UP);
+        chord.slideFromNotes(Note.Slide.DOWN);
+        for (Note note : chord.getNotes()) {
+            assertEquals(note.getSlideTo(), Note.Slide.UP);
+            assertEquals(note.getSlideFrom(), Note.Slide.DOWN);
+        }
+    }
 }
