@@ -1,1 +1,1 @@
-{"tuning":["A","Bb","C","D","F","Test Tune"],"chords":[[-2,1,2,2,0,-1],[3,0,0,0,2,3]]}
+{"tuning":["A","Bb","C","D","F","Fake tuning"],"chords":[[["NONE",-2,"HALF","DOWN"],["NONE",1,"HALF","DOWN"],["NONE",2,"HALF","DOWN"],["NONE",2,"HALF","DOWN"],["NONE",0,"HALF","DOWN"],["NONE",-1,"HALF","DOWN"]],[["UP",3,"FULL","NONE"],["UP",0,"FULL","NONE"],["UP",0,"FULL","NONE"],["UP",0,"FULL","NONE"],["UP",2,"FULL","NONE"],["UP",3,"FULL","NONE"]]]}

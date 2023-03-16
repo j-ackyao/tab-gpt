@@ -39,9 +39,9 @@ public class Chord {
     }
 
     /**
-     * @EFFECTS: private constructor for cloning Chord
+     * @EFFECTS: constructor for creating chord with Note[]
      */
-    private Chord(Note[] notes) {
+    public Chord(Note[] notes) {
         this.size = notes.length;
         this.notes = new Note[notes.length];
         for (int i = 0; i < notes.length; i++) {
