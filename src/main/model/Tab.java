@@ -102,14 +102,6 @@ public class Tab {
         return String.join("", Collections.nCopies(n, s));
     }
 
-    /*
-    the following overloading methods involving Chord as param are not recommended in tab editing
-    as runtime errors will not occur, but when handled improperly (ie. chord.size < this.size),
-    unexpected behaviours may occur when attempting to edit chord.
-    the methods are used mainly for testing
-    may be fixed if Chord.notes is changed to ArrayList
-     */
-
     /**
      * @EFFECTS: adds a new Chord to the end of the tab's list of Chords and returns it
      * @MODIFIES: this

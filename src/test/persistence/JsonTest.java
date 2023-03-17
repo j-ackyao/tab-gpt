@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -20,9 +21,10 @@ public class JsonTest {
 
     @BeforeEach
     void testInit() {
-        tuning = new String[]{"A", "Bb", "C", "D", "F", "Test Tune"};
-        chord = new Chord(new int[]{3, 0, 0, 0, 2, 3});
-        altChord = new Chord(new int[]{Note.MUTE, 1, 2, 2, 0, Note.EMPTY});
+        tuning = new String[]{"A", "Bb", "C", "D", "F", "Fake tuning"};
+        chord = new Chord(new int[]{3, 0, 0, 0, 2, 3}).slideFromNotes(Note.Slide.DOWN);
+        altChord = new Chord(new int[]{Note.MUTE, 1, 2, 2, 0, Note.EMPTY})
+                .bendNotes(Note.Bend.FULL).slideToNotes(Note.Slide.UP);
 
     }
 
@@ -40,6 +42,12 @@ public class JsonTest {
         assertEquals(2, load.getLength());
         assertArrayEquals(tuning, load.getTuning());
         assertArrayEquals(altChord.getFrets(), load.getChord(0).getFrets());
+        Arrays.asList(load.getChord(0).getNotes()).forEach(n -> assertEquals(Note.Bend.HALF, n.getBend()));
+        Arrays.asList(load.getChord(0).getNotes()).forEach(n -> assertEquals(Note.Slide.DOWN, n.getSlideFrom()));
+        Arrays.asList(load.getChord(0).getNotes()).forEach(n -> assertEquals(Note.Slide.NONE, n.getSlideTo()));
+        Arrays.asList(load.getChord(1).getNotes()).forEach(n -> assertEquals(Note.Bend.FULL, n.getBend()));
+        Arrays.asList(load.getChord(1).getNotes()).forEach(n -> assertEquals(Note.Slide.UP, n.getSlideTo()));
+        Arrays.asList(load.getChord(1).getNotes()).forEach(n -> assertEquals(Note.Slide.NONE, n.getSlideFrom()));
         assertArrayEquals(chord.getFrets(), load.getChord(1).getFrets());
     }
 
@@ -48,7 +56,7 @@ public class JsonTest {
         tab = new Tab("testTabs/saveTest", tuning);
         tab.addChord(chord);
         tab.addChord(altChord);
-        tab.addChord(chord);
+
 
         Tab load = null;
         try {
@@ -62,11 +70,15 @@ public class JsonTest {
 
         assertEquals("testTabs/saveTest", load.getName());
         assertEquals(6, load.size);
-        assertEquals(3, load.getLength());
+        assertEquals(2, load.getLength());
         assertArrayEquals(tuning, load.getTuning());
         assertArrayEquals(chord.getFrets(), tab.getChord(0).getFrets());
         assertArrayEquals(altChord.getFrets(), tab.getChord(1).getFrets());
-        assertArrayEquals(chord.getFrets(), tab.getChord(2).getFrets());
+        Arrays.asList(load.getChord(0).getNotes()).forEach(n -> assertEquals(Note.Bend.NONE, n.getBend()));
+        Arrays.asList(load.getChord(0).getNotes()).forEach(n -> assertEquals(Note.Slide.DOWN, n.getSlideFrom()));
+        Arrays.asList(load.getChord(1).getNotes()).forEach(n -> assertEquals(Note.Bend.FULL, n.getBend()));
+        Arrays.asList(load.getChord(1).getNotes()).forEach(n -> assertEquals(Note.Slide.NONE, n.getSlideFrom()));
+        Arrays.asList(load.getChord(1).getNotes()).forEach(n -> assertEquals(Note.Slide.UP, n.getSlideTo()));
     }
 
     @Test
