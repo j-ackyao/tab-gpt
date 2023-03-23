@@ -57,7 +57,7 @@ public class Note {
     public static final int MUTE = -2;
 
     // string representation of other guitar notations
-    public static final String EMPTY_STRING = "-";
+    public static final String EMPTY_STRING = "";
     public static final String MUTE_STRING = "x";
 
     // below are constants for bends and slides

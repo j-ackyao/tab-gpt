@@ -15,8 +15,8 @@ public class Tab {
     // the amount of CHORD_SPACER to be placed in between chords
     // should be greater than 1
     public static final int CHORD_SPACING = 3;
-    // the string to be used to space out chords
-    public static final String CHORD_SPACER = Note.EMPTY_STRING;
+    // the string to be used draw the lines
+    public static final String LINE_CHAR = "-";
 
     // the number of guitar strings of Tab
     public final int size;
@@ -67,7 +67,7 @@ public class Tab {
 
         for (int i = 0; i < tuning.length; i++) {
             output[i] = tuning[i] + repeat(tuningMaxLength - tuning[i].length(), " ")
-                    + "|" + repeat(CHORD_SPACING, CHORD_SPACER);
+                    + "|" + repeat(CHORD_SPACING, LINE_CHAR);
         }
 
         if (chordPos) {
@@ -84,8 +84,8 @@ public class Tab {
 
             // accounts for chords of different sizes
             for (int j = 0; j < size; j++) {
-                output[j] += (j < c.size ? c.getNote(j) : Note.EMPTY_STRING) + repeat(CHORD_SPACING + noteMaxLength
-                        - (j < c.size ? c.getNote(j).toString().length() : 1), CHORD_SPACER);
+                output[j] += (j < c.size ? c.getNote(j) : LINE_CHAR) + repeat(CHORD_SPACING + noteMaxLength
+                        - (j < c.size ? c.getNote(j).toString().length() : 1), LINE_CHAR);
             }
             if (chordPos) {
                 output[size] += i + repeat(CHORD_SPACING + noteMaxLength - Integer.toString(i).length(), " ");

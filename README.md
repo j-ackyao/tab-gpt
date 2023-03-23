@@ -60,7 +60,8 @@ simple task, and I want a program that is:
 - [x] I want to be able to insert chords between chords in my tab
 - [x] I want to be able to have and show custom tuning in my tab
 - [x] I want to be able to copy and paste notes/chords in my tab
-- [ ] I want to be able to add slides/bends to my notes
+- [x] I want to be able to add slides/bends to my notes
 - [x] I want to be able to save my tab
 - [x] I want to be able to load my saved tab
+- [x] I want a UI that's not just the console
 - [ ] I want to be able to export my tab into text
