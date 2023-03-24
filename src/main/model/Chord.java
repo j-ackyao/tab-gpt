@@ -120,11 +120,11 @@ public class Chord {
     }
 
     public Note getNote(int pos) {
-        return notes[pos].cloneNote();
+        return notes[pos];
     }
 
     public Note[] getNotes() {
-        return notes.clone();
+        return notes;
     }
 
     /**

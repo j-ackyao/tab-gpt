@@ -14,7 +14,6 @@ public class GraphicalEditor extends JFrame {
     private MenuPanel menuPanel;
     private TabPanel tabPanel;
     private TabMenuBar tabMenuBar;
-    private Tab tab;
 
 
     public GraphicalEditor() {
@@ -28,7 +27,6 @@ public class GraphicalEditor extends JFrame {
         this.layout = new CardLayout();
         this.contentPane.setLayout(layout);
 
-        this.tab = null;
 
         initMenuPanel();
         initTabPanel();
@@ -101,8 +99,8 @@ public class GraphicalEditor extends JFrame {
         }
     }
 
-    public void setTab(Tab tab) {
-        this.tab = tab;
-        this.tabPanel.updateTabLabel();
+    public void loadTab(Tab tab) {
+        tabPanel.setTab(tab);
+        showScreen(TAB_SCREEN_NAME);
     }
 }

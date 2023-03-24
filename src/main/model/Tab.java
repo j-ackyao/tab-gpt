@@ -108,7 +108,7 @@ public class Tab {
      */
     public Chord addChord() {
         Chord newChord = new Chord(this.size);
-        this.chords.add(newChord);
+        chords.add(newChord);
         return newChord;
     }
 
@@ -197,10 +197,10 @@ public class Tab {
 
     /**
      * @REQUIRES: pos >= 0, this.chords.size > 0
-     * @EFFECTS: returns the Chord at given position without reference
+     * @EFFECTS: returns the Chord at given position with
      */
     public Chord getChord(int pos) {
-        return chords.get(pos).cloneChord();
+        return chords.get(pos);
     }
 
     /**
@@ -215,10 +215,10 @@ public class Tab {
     }
 
     public String[] getTuning() {
-        return tuning.clone();
+        return tuning;
     }
 
     public ArrayList<Chord> getChords() {
-        return new ArrayList<>(this.chords);
+        return this.chords;
     }
 }

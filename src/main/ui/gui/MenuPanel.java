@@ -66,7 +66,7 @@ public class MenuPanel extends JPanel {
             tuning = Tab.STANDARD_TUNING;
         }
 
-        parent.setTab(new Tab(name, tuning));
+        parent.loadTab(new Tab(name, tuning));
         parent.showScreen(parent.TAB_SCREEN_NAME);
     }
 
@@ -92,7 +92,7 @@ public class MenuPanel extends JPanel {
         }
 
 
-        parent.setTab(loadTab);
+        parent.loadTab(loadTab);
         parent.showScreen(parent.TAB_SCREEN_NAME);
     }
 

@@ -238,7 +238,7 @@ public class ConsoleEditor {
         if (args.length < 2) {
             print("Please provide two positions to copy from and paste to");
         } else {
-            tab.insertChord(Integer.parseInt(args[1]), tab.getChord(Integer.parseInt(args[0])));
+            tab.insertChord(Integer.parseInt(args[1]), tab.getChord(Integer.parseInt(args[0])).cloneChord());
             print(tab.toString(true));
         }
     }
