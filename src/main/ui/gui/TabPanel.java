@@ -10,21 +10,17 @@ import java.util.ArrayList;
 
 public class TabPanel extends JPanel {
 
-    private final GraphicalEditor parent;
+    private final TabPopupMenu tpm;
     private Tab tab;
-
-    private ArrayList<ChordPanel> chordPanels;
-    private Container tabContainer;
-    private TabPopupMenu jpm;
 
     public TabPanel(GraphicalEditor parent) {
         super();
-        this.parent = parent;
-        this.chordPanels = new ArrayList<>();
-        this.setLayout(new FlowLayout(FlowLayout.LEFT));
+        this.tab = null;
 
-        jpm = new TabPopupMenu();
-        this.add(jpm);
+        setLayout(new FlowLayout(FlowLayout.LEFT));
+
+        // assigning to local param instead of adding to avoid loss when removeAll()
+        this.tpm = new TabPopupMenu(parent, this);
 
         //this.tabContainer = new JScrollPane(this,
         //        JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
@@ -32,18 +28,41 @@ public class TabPanel extends JPanel {
         //this.parent.add(tabContainer);
     }
 
-    public void setTab(Tab tab) {
-        this.tab = tab;
-        chordPanels = new ArrayList<>(); // pray java garbage collects
-        ArrayList<Chord> chords = tab.getChords();
-        for (int i = 0; i < chords.size(); i++) {
-            add(new ChordPanel(this, chords.get(i)),i);
-        }
+    public void promptChordOptions(ChordPanel cp, MouseEvent e) {
+        tpm.setSelectedChordPanel(cp);
+        tpm.show(this, e.getX() + cp.getX(), e.getY() + cp.getY());
     }
 
-    public void promptChordOptions(ChordPanel cp, MouseEvent e) {
-        jpm.setSelectedChord(cp.getChord());
+    public void addChord(Chord c, int i) {
+        // tab is 0 based index, chordpanels are 1 based index
+        tab.insertChord(i, c);
+        add(new ChordPanel(this, c), i + 1);
+        repaint();
+        revalidate();
+    }
 
-        jpm.show(this, e.getX() + cp.getX(), e.getY() + cp.getY());
+    public Tab getTab() {
+        return tab;
+    }
+
+    public void setTab(Tab tab) {
+        this.tab = tab;
+        removeAll(); // pray java garbage collects properly
+
+        JPanel tuningPanel = new JPanel();
+
+        tuningPanel.setLayout(new GridLayout(tab.size, 1));
+        for (String t : tab.getTuning()) {
+            tuningPanel.add(new JLabel(t));
+        }
+        add(tuningPanel, 0);
+
+        ArrayList<Chord> chords = tab.getChords();
+        for (int i = 0; i < chords.size(); i++) {
+            // + 1 to account for tuning panel
+            add(new ChordPanel(this, chords.get(i)), i + 1);
+        }
+        repaint();
+        revalidate();
     }
 }

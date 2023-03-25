@@ -8,11 +8,15 @@ import org.junit.jupiter.api.Test;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class JsonTest {
+public class JsonAndWriterTest {
 
     String[] tuning;
     Tab tab;
@@ -33,7 +37,7 @@ public class JsonTest {
     void testLoadTestTab() {
         Tab load = null;
         try {
-            load = Json.load("testTabs/loadTest");
+            load = JsonAndWriter.load("testTabs/loadTest");
         } catch (IOException io) {
             fail("loadTest.tab not found or unable to load");
         }
@@ -60,8 +64,8 @@ public class JsonTest {
 
         Tab load = null;
         try {
-            Json.save(tab);
-            load = Json.load("testTabs/saveTest");
+            JsonAndWriter.save(tab);
+            load = JsonAndWriter.load("testTabs/saveTest");
         } catch (FileNotFoundException fnf) {
             fail("File not found exception");
         } catch (IOException io) {
@@ -84,10 +88,33 @@ public class JsonTest {
     @Test
     void testInvalidLoad() {
         try {
-            Json.load("\\");
+            JsonAndWriter.load("\\");
             fail("Loaded invalid tab");
         } catch (IOException io) {
             // Expected behaviour
+        }
+    }
+
+    @Test
+    void testExport() {
+        tab = new Tab("testTabs/exportText");
+        tab.addChord(chord);
+        tab.addChord(altChord);
+        try {
+            JsonAndWriter.export(tab);
+        } catch (IOException ioe) {
+            fail("Unexpected IOException when exporting");
+        }
+        try {
+            StringBuilder builder = new StringBuilder();
+            Stream<String> stream = Files.lines(
+                    Paths.get(JsonAndWriter.PATH + "testTabs/exportText" + JsonAndWriter.EXPORT_EXTN),
+                    StandardCharsets.UTF_8);
+            stream.forEach(s -> builder.append(s).append("\n"));
+            stream.close();
+            assertEquals(tab.toString(), builder.toString().trim());
+        } catch (IOException ioe) {
+            fail("Unexpected IOException when reading");
         }
     }
 

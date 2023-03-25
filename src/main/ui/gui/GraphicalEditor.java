@@ -1,9 +1,11 @@
 package ui.gui;
 
 import model.Tab;
+import persistence.JsonAndWriter;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
 
 public class GraphicalEditor extends JFrame {
 
@@ -11,7 +13,6 @@ public class GraphicalEditor extends JFrame {
     public static final String TAB_SCREEN_NAME = "tab";
     private final Container contentPane;
     private final CardLayout layout;
-    private MenuPanel menuPanel;
     private TabPanel tabPanel;
     private TabMenuBar tabMenuBar;
 
@@ -36,13 +37,8 @@ public class GraphicalEditor extends JFrame {
         showScreen(MENU_SCREEN_NAME);
     }
 
-    public static void main(String[] args) {
-        GraphicalEditor ge = new GraphicalEditor();
-    }
-
     private void initMenuPanel() {
-        menuPanel = new MenuPanel(this);
-        contentPane.add(MENU_SCREEN_NAME, menuPanel);
+        contentPane.add(MENU_SCREEN_NAME, new MenuPanel(this));
     }
 
     private void initTabPanel() {
@@ -51,52 +47,77 @@ public class GraphicalEditor extends JFrame {
     }
 
     private void initMenuBar() {
-        tabMenuBar = new TabMenuBar();
+        tabMenuBar = new TabMenuBar(this, tabPanel);
         setJMenuBar(tabMenuBar);
     }
 
-    //todo
-    /*
-    private void updateTabPanel() {
-        JTextArea tuning = new JTextArea();
-        for (String t : testTab.getTuning()) {
-            tuning.append(t + "\n");
-        }
-        tabPanel.add(tuning);
-
-        for (Chord c : testTab.getChords()) {
-            JTextArea sltoText = new JTextArea();
-            JTextArea fretText = new JTextArea();
-            JTextArea bendText = new JTextArea();
-            JTextArea slfrText = new JTextArea();
-            for (Note n : c.getNotes()) {
-                sltoText.append(n.getSlideTo() + "\n");
-                fretText.append((n.getFret() == -1 ? "" : n.getFret() == -2 ? "x" : n.getFret()) + "\n");
-                bendText.append(n.getBend() + "\n");
-                slfrText.append(n.getSlideFrom() + "\n");
-            }
-            tabPanel.add(sltoText);
-            tabPanel.add(fretText);
-            tabPanel.add(bendText);
-            tabPanel.add(slfrText);
-        }
-
-        Arrays.asList(tabPanel.getComponents()).forEach(c -> ((JComponent) c).setOpaque(false));
-
-    }*/
-
     public void showScreen(String name) {
-        switch (name) {
-            case MENU_SCREEN_NAME:
-                layout.show(contentPane, name);
-                tabMenuBar.setVisible(false);
-                break;
-            case TAB_SCREEN_NAME:
-                layout.show(contentPane, name);
-                tabMenuBar.setVisible(true);
-                break;
+        layout.show(contentPane, name);
+        tabMenuBar.setVisible(name.equals(TAB_SCREEN_NAME));
+        repaint();
+        revalidate();
+    }
+
+    public void newTabAction() {
+        String name = "";
+        while (name.isBlank()) {
+            name = JOptionPane.showInputDialog(getContentPane(), "Name for new tab",
+                    "New tab", JOptionPane.PLAIN_MESSAGE);
+            if (name == null) {
+                return;
+            } else if (name.isBlank()) {
+                promptEmptyNameError();
+            }
+        }
+
+        String tuningInput = (String) JOptionPane.showInputDialog(getContentPane(),
+                "Tuning of tab in form X-X-X-...",
+                "New tab", JOptionPane.PLAIN_MESSAGE, null,
+                null, String.join("-", Tab.STANDARD_TUNING));
+        if (tuningInput == null) {
+            return;
+        }
+        String[] tuning = tuningInput.split("-");
+        if (tuningInput.isBlank() || tuning.length == 0) {
+            tuning = Tab.STANDARD_TUNING;
+        }
+        loadTab(new Tab(name, tuning));
+        showScreen(TAB_SCREEN_NAME);
+    }
+
+    public void loadTabAction() {
+        Tab loadTab = null;
+
+        while (loadTab == null) {
+            String tabName = JOptionPane.showInputDialog(getContentPane(), "Name for existing tab",
+                    "Load tab", JOptionPane.PLAIN_MESSAGE);
+            if (tabName == null) {
+                return;
+            } else if (tabName.isBlank()) {
+                promptEmptyNameError();
+                return;
+            }
+            try {
+                loadTab = JsonAndWriter.load(tabName);
+            } catch (IOException ioe) {
+                JOptionPane.showMessageDialog(getContentPane(), "Tab of name '" + tabName + "' was not found",
+                        "Not found", JOptionPane.ERROR_MESSAGE);
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(getContentPane(), "Tab of name '" + tabName
+                                + "' could not be loaded, may be corrupt.",
+                        "Load fail", JOptionPane.ERROR_MESSAGE);
+            }
 
         }
+
+
+        loadTab(loadTab);
+        showScreen(TAB_SCREEN_NAME);
+    }
+
+    private void promptEmptyNameError() {
+        JOptionPane.showMessageDialog(getContentPane(),
+                "No name was provided", "Empty input", JOptionPane.ERROR_MESSAGE);
     }
 
     public void loadTab(Tab tab) {

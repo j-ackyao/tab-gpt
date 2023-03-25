@@ -2,7 +2,7 @@ package ui;
 
 import model.Note;
 import model.Tab;
-import persistence.Json;
+import persistence.JsonAndWriter;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -41,7 +41,7 @@ public class ConsoleEditor {
                 return;
             }
             try {
-                this.tab = Json.load(tabName);
+                this.tab = JsonAndWriter.load(tabName);
                 return;
             } catch (IOException io) {
                 print("Tab not found try again");
@@ -248,7 +248,7 @@ public class ConsoleEditor {
      */
     void save() {
         try {
-            Json.save(tab);
+            JsonAndWriter.save(tab);
             print("Save successful");
         } catch (FileNotFoundException fnf) {
             print("Unable to save to tab's name");
@@ -312,8 +312,9 @@ public class ConsoleEditor {
 
     /**
      * @EFFECTS: converts given string form arg into valid frets, otherwise NumberFormatException is thrown
+     * made static so GraphicalEditor may borrow without massive refactoring between the editors
      */
-    private int[] formatToFrets(String string) {
+    public static int[] formatToFrets(String string) {
         String[] strings = string.split("-");
         int[] frets = new int[strings.length];
         for (int i = 0; i < strings.length; i++) {

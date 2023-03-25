@@ -1,13 +1,15 @@
 package ui;
 
+import ui.gui.GraphicalEditor;
+
 /**
  * Main class, starts program
  */
 public class Main {
     /**
-      * @EFFECTS: Starts ConsoleEditor, entry point for console program
+      * @EFFECTS: Entry point for program to run ConsoleEditor or GraphicalEditor
       */
     public static void main(String[] args) {
-        new ConsoleEditor();
+        new GraphicalEditor();
     }
 }

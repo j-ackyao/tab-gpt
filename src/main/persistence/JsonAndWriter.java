@@ -20,12 +20,13 @@ import java.util.stream.Stream;
  * Class that has static methods for reading and writing save files
  * Avoids creating objects with static methods
  */
-public final class Json {
+public final class JsonAndWriter {
 
     // location of where data is saved to
-    private static final String PATH = "./data/";
+    public static final String PATH = "./data/";
     // extension of file type
-    private static final String EXTN = ".tab";
+    public static final String EXTN = ".tab";
+    public static final String EXPORT_EXTN = ".txt";
 
     private static final int SLTO_POS = 0;
     private static final int FRET_POS = 1;
@@ -33,8 +34,17 @@ public final class Json {
     private static final int SLFR_POS = 3;
 
     // privatizes constructor, Json won't be instantiated as an object
-    private Json() {
+    private JsonAndWriter() {
 
+    }
+
+    /**
+     * @EFFECTS: exports tab to text as txt file
+     */
+    public static void export(Tab tab) throws IOException {
+        PrintWriter writer = new PrintWriter(PATH + tab.getName() + EXPORT_EXTN);
+        writer.write(tab.toString());
+        writer.close();
     }
 
     /**
@@ -94,8 +104,7 @@ public final class Json {
         String[] tuning = tab.getTuning();
         ArrayList<Chord> chords = tab.getChords();
 
-        PrintWriter writer;
-        writer = new PrintWriter(PATH + name + EXTN);
+        PrintWriter writer = new PrintWriter(PATH + name + EXTN);
 
         // name is not stored in file, as the name of the tab is whatever the file name is
         JSONObject json = new JSONObject();

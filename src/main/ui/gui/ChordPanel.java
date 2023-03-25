@@ -4,14 +4,9 @@ import model.Chord;
 import model.Note;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import java.awt.*;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.sql.Array;
-import java.util.ArrayList;
-import java.util.Arrays;
 
 public class ChordPanel extends JPanel {
 
@@ -97,7 +92,7 @@ public class ChordPanel extends JPanel {
         return this.chord;
     }
 
-    private void updateLabels() {
+    public void updateLabels() {
         for (int i = 0; i < chord.size; i++) {
             Note note = chord.getNote(i);
             if (note.getFret() == Note.EMPTY) {
@@ -108,7 +103,7 @@ public class ChordPanel extends JPanel {
                 continue;
             }
             slto[i].setText(note.getSlideTo().toString());
-            fret[i].setText(Integer.toString(note.getFret()));
+            fret[i].setText(note.getFret() == Note.MUTE ? "x" : Integer.toString(note.getFret()));
             bend[i].setText(note.getBend().toString());
             slfr[i].setText(note.getSlideFrom().toString());
         }
