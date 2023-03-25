@@ -64,4 +64,22 @@ simple task, and I want a program that is:
 - [x] I want to be able to save my tab
 - [x] I want to be able to load my saved tab
 - [x] I want a UI that's not just the console
-- [ ] I want to be able to export my tab into text
+- [x] I want to be able to export my tab into text
+
+## Instructions for Grader
+
+- #### First adding multiple Xs to a Y
+  1. Have tab editing menu open (either new state or loaded state).
+  2. `Add new chord` can be found on the top menu bar.
+- #### Second adding multiple Xs to a Y
+  1. Have tab editing menu open with an existing chord (can be added with previous action).
+  2. Right-click existing chord to prompt popup menu.
+  3. Generate second action by `Insert` or `Paste` (`Copy` must be used prior to `Paste`).
+- #### Visual component
+  - Found in main menu when launching program.
+- #### Saving states
+  1. Be in tab editing menu (either new state or loaded state).
+  2. Save state by clicking `Save` found under `File` on the top left of the menu bar.
+- #### Loading states
+  1. Be in main menu (menu when program first loaded).
+  2. Load state by clicking `Load tab` and providing existing tab name found in `./data/`.
