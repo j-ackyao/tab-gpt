@@ -5,9 +5,16 @@ import persistence.JsonAndWriter;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.io.IOException;
 
+/**
+ * GUI editor for tab, including menu to save and load
+ */
 public class GraphicalEditor extends JFrame {
+
+    public static final Dimension START_UP_DIMENSION = new Dimension(400, 300);
 
     public static final String MENU_SCREEN_NAME = "menu";
     public static final String TAB_SCREEN_NAME = "tab";
@@ -16,11 +23,13 @@ public class GraphicalEditor extends JFrame {
     private TabPanel tabPanel;
     private TabMenuBar tabMenuBar;
 
-
+    /**
+     * @EFFECTS: constructs GraphicalEditor with START_UP_DIMENSION and CardLayout, initializes menu and tab
+     */
     public GraphicalEditor() {
         super("Tab GPT");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setPreferredSize(new Dimension(400, 300));
+        setPreferredSize(START_UP_DIMENSION);
         setVisible(true);
         setResizable(true);
 
@@ -31,26 +40,53 @@ public class GraphicalEditor extends JFrame {
 
         initMenuPanel();
         initTabPanel();
+        // resizing due to broken flow layout
+        addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                super.componentResized(e);
+                tabPanel.updateHeight();
+            }
+        });
         initMenuBar();
 
         pack();
         showScreen(MENU_SCREEN_NAME);
     }
 
+    /**
+     * @EFFECTS: helper for the constructor to initialize and add menuPanel
+     * @MODIFIES: this
+     */
     private void initMenuPanel() {
-        contentPane.add(MENU_SCREEN_NAME, new MenuPanel(this));
+        this.contentPane.add(MENU_SCREEN_NAME, new MenuPanel(this));
     }
 
+    /**
+     * @EFFECTS: helper for the constructor to initialize and add tabPanel
+     * @MODIFIES: this
+     */
     private void initTabPanel() {
-        tabPanel = new TabPanel(this);
-        contentPane.add(TAB_SCREEN_NAME, tabPanel);
+        this.tabPanel = new TabPanel(this);
+        this.tabPanel.setPreferredSize(getSize());
+        JScrollPane scrollPane = new JScrollPane(tabPanel,
+                JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        this.contentPane.add(TAB_SCREEN_NAME, scrollPane);
     }
 
+    /**
+     * @EFFECTS: helper for the constructor to initialize and add menuBar
+     * @MODIFIES: this
+     */
     private void initMenuBar() {
-        tabMenuBar = new TabMenuBar(this, tabPanel);
+        this.tabMenuBar = new TabMenuBar(this, tabPanel);
         setJMenuBar(tabMenuBar);
     }
 
+    /**
+     * @EFFECTS: switches between screens (menu, tab) using CardLayout
+     * @MODIFIES: this
+     */
     public void showScreen(String name) {
         layout.show(contentPane, name);
         tabMenuBar.setVisible(name.equals(TAB_SCREEN_NAME));
@@ -58,6 +94,10 @@ public class GraphicalEditor extends JFrame {
         revalidate();
     }
 
+    /**
+     * @EFFECTS: action to prompt window for user when new tab was chosen
+     * @MODIFIES: this
+     */
     public void newTabAction() {
         String name = "";
         while (name.isBlank()) {
@@ -85,6 +125,10 @@ public class GraphicalEditor extends JFrame {
         showScreen(TAB_SCREEN_NAME);
     }
 
+    /**
+     * @EFFECTS: action to prompt window for user when load tab was chosen
+     * @MODIFIES: this
+     */
     public void loadTabAction() {
         Tab loadTab = null;
 
@@ -110,16 +154,22 @@ public class GraphicalEditor extends JFrame {
 
         }
 
-
         loadTab(loadTab);
         showScreen(TAB_SCREEN_NAME);
     }
 
+
+    /**
+     * @EFFECTS: prompts window stating the user provided an empty input
+     */
     private void promptEmptyNameError() {
         JOptionPane.showMessageDialog(getContentPane(),
                 "No name was provided", "Empty input", JOptionPane.ERROR_MESSAGE);
     }
 
+    /**
+     * @EFFECTS: updates tabPanel and switches to tab screen
+     */
     public void loadTab(Tab tab) {
         tabPanel.setTab(tab);
         showScreen(TAB_SCREEN_NAME);

@@ -8,43 +8,58 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
+/**
+ * A JPanel representing the tab editing screen, shows the tab and handles editing interactions
+ */
 public class TabPanel extends JPanel {
 
-    private final TabPopupMenu tpm;
+    private final GraphicalEditor parent;
+    private final TabPopupMenu popup;
+    private final FlowLayout fl;
     private Tab tab;
 
+    /**
+     * @EFFECTS: initially instantiates as empty with null tab
+     */
     public TabPanel(GraphicalEditor parent) {
         super();
+        this.parent = parent;
         this.tab = null;
 
-        setLayout(new FlowLayout(FlowLayout.LEFT));
+        this.fl = new FlowLayout(FlowLayout.LEFT);
+        this.fl.setHgap(0);
+        setLayout(fl);
 
         // assigning to local param instead of adding to avoid loss when removeAll()
-        this.tpm = new TabPopupMenu(parent, this);
-
-        //this.tabContainer = new JScrollPane(this,
-        //        JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
-        //        JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        //this.parent.add(tabContainer);
+        this.popup = new TabPopupMenu(parent, this);
     }
 
-    public void promptChordOptions(ChordPanel cp, MouseEvent e) {
-        tpm.setSelectedChordPanel(cp);
-        tpm.show(this, e.getX() + cp.getX(), e.getY() + cp.getY());
+    /**
+     * @EFFECTS: updates the currently selected chordPanel of popup and shows popup on screen
+     * @MODIFIES: this
+     */
+    public void promptChordOptions(ChordPanel chordPanel, MouseEvent e) {
+        popup.setSelectedChordPanel(chordPanel);
+        popup.show(this, e.getX() + chordPanel.getX(), e.getY() + chordPanel.getY());
     }
 
-    public void addChord(Chord c, int i) {
+    /**
+     * @REQUIRES: index >= 0
+     * @EFFECTS: adds chord at index for both tab and tabPanel, accounting for 1 based index of tabPanel
+     * @MODIFIES: this
+     */
+    public void addChord(Chord chord, int index) {
         // tab is 0 based index, chordpanels are 1 based index
-        tab.insertChord(i, c);
-        add(new ChordPanel(this, c), i + 1);
+        tab.insertChord(index, chord);
+        add(new ChordPanel(this, chord), index + 1);
         repaint();
         revalidate();
     }
 
-    public Tab getTab() {
-        return tab;
-    }
-
+    /**
+     * @EFFECTS: replaces current tab information with new tab and updates labels
+     * @MODIFIES: this
+     */
     public void setTab(Tab tab) {
         this.tab = tab;
         removeAll(); // pray java garbage collects properly
@@ -64,5 +79,36 @@ public class TabPanel extends JPanel {
         }
         repaint();
         revalidate();
+    }
+
+    public Tab getTab() {
+        return tab;
+    }
+
+    /**
+     * @EFFECTS: updates the height on window change to compensate for FlowLayout's implementation
+     * @MODIFIES: this
+     */
+    public void updateHeight() {
+        if (tab == null) {
+            return;
+        }
+
+        // calculates the number of rows
+        int rows = 1;
+        int maxWidth = parent.getWidth();
+        int widthCounter = 0;
+        for (Component c : getComponents()) {
+            widthCounter += c.getWidth();
+            if (widthCounter > maxWidth) {
+                widthCounter = c.getWidth();
+                rows++;
+            }
+        }
+
+        // under the assumption that all components are same size (should be)
+        int componentHeight = fl.getVgap() + getComponent(0).getHeight();
+        int height = (componentHeight * rows) + fl.getVgap() * 2;
+        setPreferredSize(new Dimension(parent.getWidth() - 5, height));
     }
 }

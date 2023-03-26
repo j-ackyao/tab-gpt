@@ -8,6 +8,9 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+/**
+ * JPanel representing all the information of a chord
+ */
 public class ChordPanel extends JPanel {
 
     private static final FlowLayout fl = new FlowLayout(FlowLayout.LEFT, 0, 0);
@@ -25,6 +28,9 @@ public class ChordPanel extends JPanel {
     private JPanel bendPanel;
     private JPanel slfrPanel;
 
+    /**
+     * @EFFECTS: constructs ChordPanel with given chord and listener for right-click
+     */
     public ChordPanel(TabPanel parent, Chord chord) {
         this.parent = parent;
         this.chord = chord;
@@ -46,6 +52,18 @@ public class ChordPanel extends JPanel {
         setBorder(BorderFactory.createLineBorder(Color.black));
     }
 
+    /**
+     * @EFFECTS: action for right-click listener
+     * @MODIFIES: this
+     */
+    private void promptChordOptions(MouseEvent e) {
+        parent.promptChordOptions(this, e);
+    }
+
+    /**
+     * @EFFECTS: helper constructor for each labels of each note's attributes
+     * @MODIFIES: this
+     */
     private void initLabels() {
         slto = new JLabel[chord.size];
         fret = new JLabel[chord.size];
@@ -64,6 +82,10 @@ public class ChordPanel extends JPanel {
         }
     }
 
+    /**
+     * @EFFECTS: helper constructor for each panel of note attributes
+     * @MODIFIES: this
+     */
     private void initPanels() {
         sltoPanel = new JPanel();
         fretPanel = new JPanel();
@@ -84,14 +106,14 @@ public class ChordPanel extends JPanel {
         add(slfrPanel);
     }
 
-    private void promptChordOptions(MouseEvent e) {
-        parent.promptChordOptions(this, e);
-    }
-
     public Chord getChord() {
         return this.chord;
     }
 
+    /**
+     * @EFFECTS: updates respective labels to current chord
+     * @MODIFIES: this
+     */
     public void updateLabels() {
         for (int i = 0; i < chord.size; i++) {
             Note note = chord.getNote(i);

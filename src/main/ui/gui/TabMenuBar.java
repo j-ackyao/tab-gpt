@@ -8,11 +8,17 @@ import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 
+/**
+ * Tab menu bar that holds the data persistence interaction and new chord button
+ */
 public class TabMenuBar extends JMenuBar {
 
     private final GraphicalEditor graphicalEditor;
     private final TabPanel tabPanel;
 
+    /**
+     * @EFFECTS: constructor for menu bar with two items: file and add
+     */
     public TabMenuBar(GraphicalEditor graphicalEditor, TabPanel tabPanel) {
         super();
         this.graphicalEditor = graphicalEditor;
@@ -23,7 +29,11 @@ public class TabMenuBar extends JMenuBar {
         initAddMenuItem();
     }
 
-    void initFileMenu() {
+    /**
+     * @EFFECTS: helper constructor for file item that handles the data persistence, adds to this
+     * @MODIFIES: this
+     */
+    private void initFileMenu() {
         JMenu file = new JMenu("File");
 
         file.add(createNewTabMenuItem());
@@ -37,7 +47,11 @@ public class TabMenuBar extends JMenuBar {
         add(file);
     }
 
-    void initAddMenuItem() {
+    /**
+     * @EFFECTS: helper constructor for adding chord, adds to this
+     * @MODIFIES: this
+     */
+    private void initAddMenuItem() {
         JMenuItem addChord = new JMenuItem("Add new chord");
         addChord.addActionListener(new AbstractAction() {
             @Override
@@ -50,6 +64,9 @@ public class TabMenuBar extends JMenuBar {
         add(addChord);
     }
 
+    /**
+     * @EFFECTS: helper constructor for new in file
+     */
     private JMenuItem createNewTabMenuItem() {
         JMenuItem newTab = new JMenuItem("New");
         newTab.addActionListener(new AbstractAction() {
@@ -62,6 +79,9 @@ public class TabMenuBar extends JMenuBar {
         return newTab;
     }
 
+    /**
+     * @EFFECTS: helper constructor for open in file
+     */
     private JMenuItem createOpenMenuItem() {
         JMenuItem open = new JMenuItem("Open");
         open.addActionListener(new AbstractAction() {
@@ -74,6 +94,9 @@ public class TabMenuBar extends JMenuBar {
         return open;
     }
 
+    /**
+     * @EFFECTS: helper constructor for save in file
+     */
     private JMenuItem createSaveMenuItem() {
         JMenuItem save = new JMenuItem("Save");
         save.addActionListener(new AbstractAction() {
@@ -92,6 +115,9 @@ public class TabMenuBar extends JMenuBar {
         return save;
     }
 
+    /**
+     * @EFFECTS: helper constructor for export in file
+     */
     private JMenuItem createExportMenuItem() {
         JMenuItem saveAs = new JMenuItem("Export to text");
         saveAs.addActionListener(new AbstractAction() {
@@ -111,6 +137,9 @@ public class TabMenuBar extends JMenuBar {
         return saveAs;
     }
 
+    /**
+     * @EFFECTS: helper constructor for close in file
+     */
     private JMenuItem createCloseMenuItem() {
         JMenuItem close = new JMenuItem("Close");
         close.addActionListener(new AbstractAction() {
