@@ -118,7 +118,7 @@ public class Tab {
      * @MODIFIES: this
      */
     public void addChord(Chord chord) {
-        chords.add(chord.cloneChord());
+        chords.add(chord);
     }
 
     /**
@@ -138,7 +138,7 @@ public class Tab {
      * @MODIFIES: this
      */
     public void insertChord(int pos, Chord chord) {
-        chords.add(pos, chord.cloneChord());
+        chords.add(pos, chord);
     }
 
     /**
@@ -156,7 +156,7 @@ public class Tab {
      * @MODIFIES: this
      */
     public void editChord(int pos, Chord chord) {
-        chords.set(pos, chord.cloneChord());
+        chords.set(pos, chord);
     }
 
     /**

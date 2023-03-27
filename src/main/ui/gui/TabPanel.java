@@ -49,7 +49,7 @@ public class TabPanel extends JPanel {
      * @MODIFIES: this
      */
     public void addChord(Chord chord, int index) {
-        // tab is 0 based index, chordpanels are 1 based index
+        // tab is 0 based index, chordPanels are 1 based index
         tab.insertChord(index, chord);
         add(new ChordPanel(this, chord), index + 1);
         repaint();

@@ -127,7 +127,7 @@ class TabTest {
         assertArrayEquals(chord.getFrets(), reference.getFrets());
         chord.editNote(0, 12);
         assertEquals(chord.size, reference.size);
-        assertFalse(Arrays.equals(chord.getFrets(), reference.getFrets()));
+        assertTrue(Arrays.equals(chord.getFrets(), reference.getFrets()));
     }
 
     @Test

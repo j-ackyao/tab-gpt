@@ -208,7 +208,7 @@ public class TabPopupMenu extends JPopupMenu {
         copy.addActionListener(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                clipboard = selectedChordPanel.getChord();
+                clipboard = selectedChordPanel.getChord().cloneChord();
             }
         });
         add(copy);
