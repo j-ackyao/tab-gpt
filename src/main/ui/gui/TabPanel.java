@@ -129,6 +129,6 @@ public class TabPanel extends JPanel {
         // under the assumption that all components are same size (should be)
         int componentHeight = fl.getVgap() + getComponent(0).getHeight();
         int height = (componentHeight * rows) + fl.getVgap() * 2;
-        setPreferredSize(new Dimension(parent.getWidth() - 5, height));
+        setPreferredSize(new Dimension(parent.getWidth() - 100, height));
     }
 }
