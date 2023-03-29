@@ -187,6 +187,6 @@ public class GraphicalEditor extends JFrame {
      * @EFFECTS: determines if the string isBlank() to compensate for Java 8 bot
      */
     public boolean stringIsBlank(String string) {
-        return string == null || string.equals("") || string.split(" ").length == 0;
+        return string == null || string.trim().split(" ").length == 0;
     }
 }
