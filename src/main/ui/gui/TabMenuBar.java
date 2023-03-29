@@ -26,6 +26,7 @@ public class TabMenuBar extends JMenuBar {
         setAlignmentX(LEFT_ALIGNMENT);
 
         initFileMenu();
+        initViewMenu();
         initAddMenuItem();
     }
 
@@ -45,6 +46,19 @@ public class TabMenuBar extends JMenuBar {
         file.add(createCloseMenuItem());
 
         add(file);
+    }
+
+    /**
+     * @EFFECTS: helper constructor for view item, handles view settings of tab
+     * @MODIFIES: this
+     */
+    private void initViewMenu() {
+        JMenu view = new JMenu("View");
+
+        view.add(createLinesMenuItem());
+        view.add(createSeparatorMenuItem());
+
+        add(view);
     }
 
     /**
@@ -145,11 +159,65 @@ public class TabMenuBar extends JMenuBar {
         close.addActionListener(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // todo prompt confirmation to save
                 graphicalEditor.showScreen(GraphicalEditor.MENU_SCREEN_NAME);
             }
         });
         return close;
+    }
+
+    /**
+     * @EFFECTS: helper constructor for lines in view
+     */
+    private JMenuItem createLinesMenuItem() {
+        JMenuItem lines = new JMenuItem("Lines");
+        lines.addActionListener(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String thicknessString;
+                thicknessString = JOptionPane.showInputDialog(graphicalEditor.getContentPane(),
+                        "Set thickness of lines",
+                        "Line thickness", JOptionPane.PLAIN_MESSAGE);
+                if (thicknessString == null) {
+                    return;
+                }
+                try {
+                    float thickness = Float.parseFloat(thicknessString);
+                    tabPanel.setLineThickness(thickness <= 0 ? 0 : thickness);
+                    tabPanel.repaint();
+                } catch (NumberFormatException nfe) {
+                    graphicalEditor.promptInvalidInputError();
+                }
+            }
+        });
+        return lines;
+    }
+
+    /**
+     * @EFFECTS: helper constructor for separators in view
+     */
+    private JMenuItem createSeparatorMenuItem() {
+        JMenuItem separators = new JMenuItem("Separators");
+        separators.addActionListener(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String thicknessString;
+                thicknessString = JOptionPane.showInputDialog(graphicalEditor.getContentPane(),
+                        "Set thickness of separator",
+                        "Separator thickness", JOptionPane.PLAIN_MESSAGE);
+                if (thicknessString == null) {
+                    return;
+                }
+                float thickness;
+                try {
+                    thickness = Float.parseFloat(thicknessString);
+                    tabPanel.setSeparatorThickness(thickness <= 0 ? 0 : thickness);
+                    tabPanel.repaint();
+                } catch (NumberFormatException nfe) {
+                    graphicalEditor.promptInvalidInputError();
+                }
+            }
+        });
+        return separators;
     }
 
 }

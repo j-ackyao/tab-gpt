@@ -62,8 +62,7 @@ public class TabPopupMenu extends JPopupMenu {
                 try {
                     selectedChord.editNotes(ConsoleEditor.formatToFrets(input));
                 } catch (NumberFormatException nfe) {
-                    JOptionPane.showMessageDialog(graphicalEditor,
-                            "Invalid input given", "Invalid input", JOptionPane.ERROR_MESSAGE);
+                    graphicalEditor.promptInvalidInputError();
                 }
                 selectedChordPanel.updateLabels();
             }

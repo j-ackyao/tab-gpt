@@ -48,8 +48,6 @@ public class ChordPanel extends JPanel {
                 }
             }
         });
-
-        setBorder(BorderFactory.createLineBorder(Color.black));
     }
 
     /**
@@ -100,6 +98,11 @@ public class ChordPanel extends JPanel {
         bendPanel.setLayout(gl);
         slfrPanel.setLayout(gl);
 
+        sltoPanel.setOpaque(false);
+        fretPanel.setOpaque(false);
+        bendPanel.setOpaque(false);
+        slfrPanel.setOpaque(false);
+
         add(sltoPanel);
         add(fretPanel);
         add(bendPanel);
@@ -128,6 +131,32 @@ public class ChordPanel extends JPanel {
             fret[i].setText(note.getFret() == Note.MUTE ? "x" : Integer.toString(note.getFret()));
             bend[i].setText(note.getBend().toString());
             slfr[i].setText(note.getSlideFrom().toString());
+        }
+    }
+
+    /**
+     * @EFFECTS: overrides paintComponent, calls super method and draws lines given parent settings
+     */
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+
+        Graphics2D g2d = (Graphics2D) g.create();
+        g2d.setColor(Color.black);
+        for (JLabel fretPanel : fret) {
+            float lineThickness = parent.getLineThickness();
+            float separatorThickness = parent.getSeparatorThickness();
+
+            if (lineThickness != 0) {
+                g2d.setStroke(new BasicStroke(lineThickness));
+                int posY = fretPanel.getY() + (int) Math.round((double) fretPanel.getHeight() / 2);
+                g2d.drawLine(0, posY, getWidth(), posY);
+            }
+
+            if (separatorThickness != 0) {
+                g2d.setStroke(new BasicStroke(separatorThickness));
+                g2d.drawLine(0, 0, 0, getHeight());
+            }
         }
     }
 }

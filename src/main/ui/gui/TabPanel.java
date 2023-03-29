@@ -17,6 +17,8 @@ public class TabPanel extends JPanel {
     private final TabPopupMenu popup;
     private final FlowLayout fl;
     private Tab tab;
+    private float lineThickness;
+    private float separatorThickness;
 
     /**
      * @EFFECTS: initially instantiates as empty with null tab
@@ -25,6 +27,8 @@ public class TabPanel extends JPanel {
         super();
         this.parent = parent;
         this.tab = null;
+        lineThickness = 0.1f;
+        separatorThickness = 0;
 
         this.fl = new FlowLayout(FlowLayout.LEFT);
         this.fl.setHgap(0);
@@ -81,8 +85,24 @@ public class TabPanel extends JPanel {
         revalidate();
     }
 
+    public void setLineThickness(float lineThickness) {
+        this.lineThickness = lineThickness;
+    }
+
+    public void setSeparatorThickness(float separatorThickness) {
+        this.separatorThickness = separatorThickness;
+    }
+
     public Tab getTab() {
         return tab;
+    }
+
+    public float getLineThickness() {
+        return lineThickness;
+    }
+
+    public float getSeparatorThickness() {
+        return separatorThickness;
     }
 
     /**

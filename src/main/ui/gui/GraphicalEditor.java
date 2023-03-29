@@ -162,9 +162,17 @@ public class GraphicalEditor extends JFrame {
     /**
      * @EFFECTS: prompts window stating the user provided an empty input
      */
-    private void promptEmptyNameError() {
+    public void promptEmptyNameError() {
         JOptionPane.showMessageDialog(getContentPane(),
                 "No name was provided", "Empty input", JOptionPane.ERROR_MESSAGE);
+    }
+
+    /**
+     * @EFFECTS: prompts window stating the user provided an invalid input
+     */
+    public void promptInvalidInputError() {
+        JOptionPane.showMessageDialog(getContentPane(),
+                "Invalid input given", "Invalid input", JOptionPane.ERROR_MESSAGE);
     }
 
     /**
