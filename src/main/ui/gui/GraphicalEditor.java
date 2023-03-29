@@ -100,12 +100,12 @@ public class GraphicalEditor extends JFrame {
      */
     public void newTabAction() {
         String name = "";
-        while (name.isBlank()) {
+        while (stringIsBlank(name)) {
             name = JOptionPane.showInputDialog(getContentPane(), "Name for new tab",
                     "New tab", JOptionPane.PLAIN_MESSAGE);
             if (name == null) {
                 return;
-            } else if (name.isBlank()) {
+            } else if (stringIsBlank(name)) {
                 promptEmptyNameError();
             }
         }
@@ -118,7 +118,7 @@ public class GraphicalEditor extends JFrame {
             return;
         }
         String[] tuning = tuningInput.split("-");
-        if (tuningInput.isBlank() || tuning.length == 0) {
+        if (stringIsBlank(tuningInput) || tuning.length == 0) {
             tuning = Tab.STANDARD_TUNING;
         }
         loadTab(new Tab(name, tuning));
@@ -137,9 +137,9 @@ public class GraphicalEditor extends JFrame {
                     "Load tab", JOptionPane.PLAIN_MESSAGE);
             if (tabName == null) {
                 return;
-            } else if (tabName.isBlank()) {
+            } else if (stringIsBlank(tabName)) {
                 promptEmptyNameError();
-                return;
+                continue;
             }
             try {
                 loadTab = JsonAndWriter.load(tabName);
@@ -181,5 +181,12 @@ public class GraphicalEditor extends JFrame {
     public void loadTab(Tab tab) {
         tabPanel.setTab(tab);
         showScreen(TAB_SCREEN_NAME);
+    }
+
+    /**
+     * @EFFECTS: determines if the string isBlank() to compensate for Java 8 bot
+     */
+    public boolean stringIsBlank(String string) {
+        return string == null || string.equals("") || string.split(" ").length == 0;
     }
 }
