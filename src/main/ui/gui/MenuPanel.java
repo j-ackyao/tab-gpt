@@ -3,6 +3,7 @@ package ui.gui;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -41,7 +42,11 @@ public class MenuPanel extends JPanel {
         add(Box.createRigidArea(new Dimension(0, 10)));
 
         JButton bottom = new JButton("Quit");
-        bottom.addActionListener(e -> System.exit(0));
+        bottom.addActionListener(e -> {
+            // triggers window closing event and subsequently printing events
+            Window window = SwingUtilities.windowForComponent((JButton)e.getSource());
+            window.dispatchEvent(new WindowEvent(window, WindowEvent.WINDOW_CLOSING));
+        });
         add(bottom, BorderLayout.LINE_END);
 
         Arrays.asList(getComponents())

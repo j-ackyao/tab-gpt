@@ -1,12 +1,15 @@
 package ui.gui;
 
 import model.Tab;
+import model.eventlogger.EventLog;
 import persistence.JsonAndWriter;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.IOException;
 
 /**
@@ -40,15 +43,9 @@ public class GraphicalEditor extends JFrame {
 
         initMenuPanel();
         initTabPanel();
-        // resizing due to broken flow layout
-        addComponentListener(new ComponentAdapter() {
-            @Override
-            public void componentResized(ComponentEvent e) {
-                super.componentResized(e);
-                tabPanel.updateHeight();
-            }
-        });
         initMenuBar();
+
+        addComponentListeners();
 
         pack();
         showScreen(MENU_SCREEN_NAME);
@@ -81,6 +78,29 @@ public class GraphicalEditor extends JFrame {
     private void initMenuBar() {
         this.tabMenuBar = new TabMenuBar(this, tabPanel);
         setJMenuBar(tabMenuBar);
+    }
+
+    /**
+     * @EFFECTS: helper for the constructor to add component listeners
+     * @MODIFIES: this
+     */
+    private void addComponentListeners() {
+        // resizing due to broken flow layout
+        addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                super.componentResized(e);
+                tabPanel.updateHeight();
+            }
+        });
+        // prints all events at window close
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                super.windowClosing(e);
+                EventLog.getInstance().forEach(System.out::println);
+            }
+        });
     }
 
     /**
