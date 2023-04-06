@@ -83,3 +83,13 @@ simple task, and I want a program that is:
 - #### Loading states
   1. Be in main menu (menu when program first loaded).
   2. Load state by clicking `Load tab` and providing existing tab name found in `./data/`.
+
+
+### Phase 4: Task 2
+```
+Thu Apr 06 13:09:38 PDT 2023
+Added chord to end of tab
+Thu Apr 06 13:09:44 PDT 2023
+Inserted [, , , , , ] at position 0
+Thu Apr 06 13:10:14 PDT 2023
+Inserted [, 3, 3, 3, x, 3] at position 1```
