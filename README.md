@@ -92,4 +92,12 @@ Added chord to end of tab
 Thu Apr 06 13:09:44 PDT 2023
 Inserted [, , , , , ] at position 0
 Thu Apr 06 13:10:14 PDT 2023
-Inserted [, 3, 3, 3, x, 3] at position 1```
+Inserted [, 3, 3, 3, x, 3] at position 1
+```
+
+### Phase 4: Task 3
+The substantive refactoring I would use to improve my program would definitely be restructuring the
+`gui` package, as it was the most rushed part of the project due to the very limited time we were given.
+Some of the classes pass their "parent" (whatever's containing it) into its components, which is probably really bad,
+so to refactor I should restructure the classes so that
+a reference isn't passed through multiple arrows (seen in the UML).
