@@ -1,6 +1,7 @@
 # tab guitar personal tab (tab gpt)
 
 free and simple guitar editor
+
 uses tablature (tab) notation
 
 > example
