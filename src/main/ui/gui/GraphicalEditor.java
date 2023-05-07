@@ -1,7 +1,6 @@
 package ui.gui;
 
 import model.Tab;
-import model.eventlogger.EventLog;
 import persistence.JsonAndWriter;
 
 import javax.swing.*;
@@ -98,7 +97,6 @@ public class GraphicalEditor extends JFrame {
             @Override
             public void windowClosing(WindowEvent e) {
                 super.windowClosing(e);
-                EventLog.getInstance().forEach(System.out::println);
             }
         });
     }

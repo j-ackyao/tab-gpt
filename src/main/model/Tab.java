@@ -1,8 +1,5 @@
 package model;
 
-import model.eventlogger.Event;
-import model.eventlogger.EventLog;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -110,8 +107,6 @@ public class Tab {
      * @MODIFIES: this
      */
     public Chord addChord() {
-        EventLog.getInstance().logEvent(new Event("Added chord to end of tab"));
-
         Chord newChord = new Chord(this.size);
         chords.add(newChord);
         return newChord;
@@ -123,9 +118,6 @@ public class Tab {
      * @MODIFIES: this
      */
     public void addChord(Chord chord) {
-        EventLog.getInstance().logEvent(new Event("Added " + Arrays.toString(chord.getNotes())
-                + " to end of tab"));
-
         chords.add(chord);
     }
 
@@ -135,8 +127,6 @@ public class Tab {
      * @MODIFIES: this
      */
     public Chord insertChord(int pos) {
-        EventLog.getInstance().logEvent(new Event("Inserted chord at position " + pos));
-
         Chord chord = new Chord(size);
         chords.add(pos, chord);
         return chord;
@@ -148,9 +138,6 @@ public class Tab {
      * @MODIFIES: this
      */
     public void insertChord(int pos, Chord chord) {
-        EventLog.getInstance().logEvent(new Event("Inserted " + Arrays.toString(chord.getNotes())
-                + " at position " + pos));
-
         chords.add(pos, chord);
     }
 
@@ -205,8 +192,6 @@ public class Tab {
      * @MODIFIES: this
      */
     public Chord removeChord(int pos) {
-        EventLog.getInstance().logEvent(new Event("Removed chord from tab at position " + pos));
-
         return chords.remove(pos);
     }
 
