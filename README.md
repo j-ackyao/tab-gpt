@@ -2,6 +2,10 @@
 
 free and simple guitar editor
 
+yet to implement rhythm and sound
+
+macos should run jar from terminal to save/load
+
 uses tablature (tab) notation
 
 > example

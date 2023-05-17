@@ -37,11 +37,11 @@ public class JsonAndWriterTest {
     void testLoadTestTab() {
         Tab load = null;
         try {
-            load = JsonAndWriter.load("testTabs/loadTest");
+            load = JsonAndWriter.load("./data/testTabs/loadTest");
         } catch (IOException io) {
             fail("loadTest.tab not found or unable to load");
         }
-        assertEquals("testTabs/loadTest", load.getName());
+        assertEquals("./data/testTabs/loadTest", load.getName());
         assertEquals(6, load.size);
         assertEquals(2, load.getLength());
         assertArrayEquals(tuning, load.getTuning());
@@ -57,7 +57,7 @@ public class JsonAndWriterTest {
 
     @Test
     void testSaveTab() {
-        tab = new Tab("testTabs/saveTest", tuning);
+        tab = new Tab("./data/testTabs/saveTest", tuning);
         tab.addChord(chord);
         tab.addChord(altChord);
 
@@ -65,14 +65,14 @@ public class JsonAndWriterTest {
         Tab load = null;
         try {
             JsonAndWriter.save(tab);
-            load = JsonAndWriter.load("testTabs/saveTest");
+            load = JsonAndWriter.load("./data/testTabs/saveTest");
         } catch (FileNotFoundException fnf) {
             fail("File not found exception");
         } catch (IOException io) {
             fail("Unable to find saveTest");
         }
 
-        assertEquals("testTabs/saveTest", load.getName());
+        assertEquals("./data/testTabs/saveTest", load.getName());
         assertEquals(6, load.size);
         assertEquals(2, load.getLength());
         assertArrayEquals(tuning, load.getTuning());
@@ -97,7 +97,7 @@ public class JsonAndWriterTest {
 
     @Test
     void testExport() {
-        tab = new Tab("testTabs/exportText");
+        tab = new Tab("./data/testTabs/exportText");
         tab.addChord(chord);
         tab.addChord(altChord);
         try {
@@ -108,7 +108,7 @@ public class JsonAndWriterTest {
         try {
             StringBuilder builder = new StringBuilder();
             Stream<String> stream = Files.lines(
-                    Paths.get(JsonAndWriter.PATH + "testTabs/exportText" + JsonAndWriter.EXPORT_EXTN),
+                    Paths.get("./data/testTabs/exportText" + JsonAndWriter.EXPORT_EXTN),
                     StandardCharsets.UTF_8);
             stream.forEach(s -> builder.append(s).append("\n"));
             stream.close();

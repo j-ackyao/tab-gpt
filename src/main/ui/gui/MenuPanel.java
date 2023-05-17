@@ -5,8 +5,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.Arrays;
 
 /**
@@ -43,7 +41,7 @@ public class MenuPanel extends JPanel {
 
         JButton bottom = new JButton("Quit");
         bottom.addActionListener(e -> {
-            // triggers window closing event and subsequently printing events
+            // triggers window closing event and subsequently printing events (no longer used)
             Window window = SwingUtilities.windowForComponent((JButton)e.getSource());
             window.dispatchEvent(new WindowEvent(window, WindowEvent.WINDOW_CLOSING));
         });
@@ -61,10 +59,10 @@ public class MenuPanel extends JPanel {
         JLabel guitar = new JLabel();
 
         try {
-            BufferedImage guitarPNG = ImageIO.read(new File("./data/guitar.png"));
+            BufferedImage guitarPNG = ImageIO.read(ClassLoader.getSystemResource("logo.png"));
             Icon icon = new ImageIcon(guitarPNG);
             guitar.setIcon(icon);
-        } catch (IOException ioe) {
+        } catch (Exception ioe) {
             guitar.setText("Couldn't load logo");
             ioe.printStackTrace();
         }
