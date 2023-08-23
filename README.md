@@ -40,3 +40,6 @@ uses tablature (tab) notation
 
 5. save or export to a text file by selecting 'File' on the top menu bar
 <img width="534" alt="image" src="https://github.com/j-ackyao/tab-gpt/assets/60021675/1121486e-af46-4c30-9884-257a87e97fcb">
+
+#### project structure
+<img width="500" alt="Untitled" src="https://github.com/j-ackyao/tab-gpt/assets/60021675/80d412ee-94e1-4070-ba2e-37a4a337ff2d">
