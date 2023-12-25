@@ -1,6 +1,6 @@
 # Guitarist's Personal Tabs (Tab GPT)
 
-<img width="463" alt="image" src="https://github.com/j-ackyao/tab-gpt/assets/60021675/e2553088-824a-4654-9e18-4d4d17a8e25a">
+<img width="573" alt="image" src="https://github.com/j-ackyao/tab-gpt/assets/60021675/792cfe9e-c079-4041-85f6-649d68c8a20c">
 
 Free and simple guitar editor
 
